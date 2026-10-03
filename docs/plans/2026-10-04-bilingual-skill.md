@@ -675,7 +675,7 @@ Expected: `22 passed`. If `test_heading_level_sequence_checked_for_unmapped` fai
 ```bash
 python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-en
 ```
-Expected: `✓ parity: 0 error(s)`. (The frontmatter check passes because `name` equals the folder name on both sides.)
+Expected: `✗ parity: 302 error(s)`, and every error line is a heading-map error (`heading ... should be ...`). Confirm with `python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-en | grep -v 'heading ' | grep -vc parity` printing `0`. This proves that on real data the file, code-block, link, quote, tag, frontmatter and index checks are all clean, while the heading check correctly demands Chinese headings.
 
 - [ ] **Step 8: Commit**
 

@@ -94,4 +94,4 @@ Tags `[DP]` `[DPE]` `[ASD]` `[J&DP]` stay exactly as written.
 
 Additional fixed renderings: smart reference proxy → 智能指引代理; protection proxy → 安全代理 (the book's own names); 'unit test' → 单元测试; Builder in prose → 建造者模式（Builder）on first mention.
 
-More fixed renderings (from batch-2 review): failure mode → 失效模式; "What it demonstrates" (code-example label) → 演示了什么; intermediary / go-between (not the Mediator pattern) → 中间人; product family → 产品系列; the verb "compose / composes an X" (object composition) → 合成, never 组合 (组合 is reserved for the Composite pattern and for 投资组合-style ordinary nouns); "coupled" → 耦合 (add 紧 only when en says "tightly").
+More fixed renderings (from batch-2 review): failure mode → 失效模式; "What it demonstrates" (code-example label) → 演示内容; intermediary / go-between (not the Mediator pattern) → 中间人; product family → 产品系列; the verb "compose / composes an X" (object composition) → 合成, never 组合 (组合 is reserved for the Composite pattern and for 投资组合-style ordinary nouns); "coupled" → 耦合 (add 紧 only when en says "tightly").

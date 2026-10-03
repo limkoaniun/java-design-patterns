@@ -1104,13 +1104,20 @@ git commit -m "docs: bilingual READMEs with language toggle"
 
 ```bash
 cd ~/Dev/projects/cheng-design-patterns
-python3 -m pytest -q
+python3 -m venv .venv && .venv/bin/pip -q install pytest && .venv/bin/python -m pytest -q
 python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh
 python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-en/SKILL.md
 python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-zh/SKILL.md
 git status --short
 ```
-Expected: `22 passed`, `✓ parity: 0 error(s)`, two `✓` validator lines, empty status. Stop here if anything is red.
+Expected: `28 passed`, `✓ parity: 0 error(s)`, two `✓` validator lines, empty status. Stop here if anything is red.
+
+- [ ] **Step 1b: Fast-forward main to the branch so the published default branch carries the work**
+
+```bash
+git checkout main && git merge --ff-only bilingual && git log --oneline -1 && git branch --show-current
+```
+Expected: the merge fast-forwards (main was never advanced independently), the latest commit matches the branch head, and the current branch is `main`. `gh repo create --push` pushes the current branch, so this step must precede Step 2.
 
 - [ ] **Step 2: Create the public repo and push**
 

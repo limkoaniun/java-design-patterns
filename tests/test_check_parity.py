@@ -248,3 +248,45 @@ def test_cli_exit_codes(trees):
     r = subprocess.run([sys.executable, str(ROOT / "tools/check_parity.py"), str(en), str(zh)], capture_output=True, text=True)
     assert r.returncode == 1
     assert "ch02-strategy.md" in r.stdout
+
+
+def test_files_unknown_path_is_error(trees, heading_map):
+    en, zh, write = trees
+    _ok_pair(write, en, zh)
+    errs = check_tree(en, zh, heading_map, files=["chapters/ch02-stratgy.md"])
+    assert any("ch02-stratgy.md" in e and "not an en file" in e for e in errs)
+
+
+def test_files_dot_slash_prefix_is_normalized(trees, heading_map):
+    en, zh, write = trees
+    _ok_pair(write, en, zh)
+    assert check_tree(en, zh, heading_map, files=["./chapters/ch02-strategy.md"]) == []
+
+
+def test_files_empty_list_is_error(trees, heading_map):
+    en, zh, write = trees
+    _ok_pair(write, en, zh)
+    assert check_tree(en, zh, heading_map, files=[])
+    r = subprocess.run([sys.executable, str(ROOT / "tools/check_parity.py"), str(en), str(zh), "--files"], capture_output=True, text=True)
+    assert r.returncode == 1
+
+
+def test_straight_quoted_tagged_quote_is_checked(trees, heading_map):
+    en, zh, write = trees
+    _ok_pair(write, en, zh)
+    write(en, "chapters/ch02-strategy.md", EN_CH + '\nHe said "建立相应数目的原型"[DP] ok.\n')
+    write(zh, "chapters/ch02-strategy.md", ZH_CH + '\n他说 "建立相应数目的原型"[DP] 好。\n')
+    assert check_tree(en, zh, heading_map) == []
+    write(zh, "chapters/ch02-strategy.md", ZH_CH + '\n他说 "建立若干原型"[DP] 好。\n')
+    errs = check_tree(en, zh, heading_map)
+    assert any("quote" in e and "建立相应数目的原型" in e for e in errs)
+
+
+def test_topic_index_chapter_refs_must_match(trees, heading_map):
+    en, zh, write = trees
+    en_text = SKILL_EN.replace("- **Strategy** → ch02", "- **Strategy** → ch02, ch04")
+    _skill_pair(write, en, zh, zh_text=en_text.replace("name: cheng-design-patterns-en", "name: cheng-design-patterns-zh")
+                .replace("## Chapter Index", "## 章节索引").replace("## Topic Index", "## 主题索引").replace("→ ch02, ch04", "→ ch02"))
+    write(en, "SKILL.md", en_text)
+    errs = check_tree(en, zh, heading_map)
+    assert any("topic index row 1" in e for e in errs)

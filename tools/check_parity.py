@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import posixpath
 import re
 import sys
 from collections import Counter
@@ -19,6 +20,8 @@ HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*$")
 FENCE_RE = re.compile(r"^```.*$")
 LINK_RE = re.compile(r"\]\(([^)\s]+?\.md)(?:#[^)]*)?\)")
 QUOTE_RE = re.compile(r"“[^”]*”", re.DOTALL)
+STRAIGHT_QUOTE_RE = re.compile(r'"[^"\n]*[一-鿿][^"\n]*"(?=\s*\[(?:DP|DPE|ASD|J&DP)\])')
+CH_RE = re.compile(r"ch\d+")
 CJK_RE = re.compile(r"[一-鿿]")
 MAX_DESC = 1024
 
@@ -78,16 +81,16 @@ def _index_links(text: str) -> list[str]:
     return re.findall(r"\]\((chapters/[^)#]+\.md)", text)
 
 
-def _topic_rows(text: str, headings: tuple[str, ...]) -> int:
-    lines, inside, n = text.splitlines(), False, 0
+def _topic_rows(text: str, headings: tuple[str, ...]) -> list[list[str]]:
+    lines, inside, rows = text.splitlines(), False, []
     for line in lines:
         m = HEADING_RE.match(line)
         if m:
             inside = m.group(2).strip() in headings
             continue
         if inside and line.startswith("- **"):
-            n += 1
-    return n
+            rows.append(CH_RE.findall(line))
+    return rows
 
 
 def check_file(rel: str, en_text: str, zh_text: str, heading_map: dict[str, str]) -> list[str]:
@@ -112,7 +115,7 @@ def check_file(rel: str, en_text: str, zh_text: str, heading_map: dict[str, str]
             if a != b:
                 errs.append(f"{rel}: code block #{i + 1} differs")
 
-    for q in QUOTE_RE.findall(en_text):
+    for q in QUOTE_RE.findall(en_text) + STRAIGHT_QUOTE_RE.findall(en_text):
         if CJK_RE.search(q) and q not in zh_text:
             errs.append(f"{rel}: quote missing in zh: {q[:40]}")
     en_tags, zh_tags = Counter(), Counter()
@@ -154,7 +157,16 @@ def check_tree(en_dir: Path, zh_dir: Path, heading_map: dict[str, str], files: l
             errs.append(f"{f}: present in zh, not in en")
         wanted = en_files
     else:
-        wanted = [f for f in en_files if f in set(files)]
+        if not files:
+            return ["--files: empty list, nothing to check"]
+        en_set = set(en_files)
+        wanted = []
+        for f in files:
+            n = posixpath.normpath(f.replace("\\", "/"))
+            if n not in en_set:
+                errs.append(f"{f}: requested in --files but not an en file")
+            elif n not in wanted:
+                wanted.append(n)
     for rel in wanted:
         zh_path = zh_dir / rel
         if not zh_path.exists():
@@ -171,8 +183,12 @@ def check_tree(en_dir: Path, zh_dir: Path, heading_map: dict[str, str], files: l
                 errs.append(f"{rel}: index link sequence differs between en and zh")
             en_rows = _topic_rows(en_text, ("Topic Index",))
             zh_rows = _topic_rows(zh_text, ("Topic Index", heading_map.get("Topic Index", "Topic Index")))
-            if en_rows != zh_rows:
-                errs.append(f"{rel}: topic index rows en={en_rows} zh={zh_rows}")
+            if len(en_rows) != len(zh_rows):
+                errs.append(f"{rel}: topic index rows en={len(en_rows)} zh={len(zh_rows)}")
+            else:
+                for i, (a, b) in enumerate(zip(en_rows, zh_rows)):
+                    if a != b:
+                        errs.append(f"{rel}: topic index row {i + 1} chapter refs en={a} zh={b}")
     return errs
 
 

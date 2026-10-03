@@ -1,6 +1,6 @@
 [English](README.en.md) · 中文
 
-# cheng-design-patterns
+# java-design-patterns
 
 从程杰《大话设计模式》生成的 Agent Skill，使用 [book-to-skill](https://github.com/virgiliojr94/book-to-skill) 构建。中英文两个版本并行维护，结构逐文件对应。
 
@@ -11,13 +11,13 @@
 中文版：
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-zh
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-zh
 ```
 
 英文版：
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-en
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-en
 ```
 
 Claude Code 用户也可以把对应文件夹软链接到 `~/.claude/skills/`。

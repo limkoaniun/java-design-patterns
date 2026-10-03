@@ -1,5 +1,5 @@
 ---
-name: cheng-design-patterns-zh
+name: java-design-patterns-zh
 description: "程杰（Cheng Jie）所著 \"大话设计模式\" 的知识库。在设计或重构Java/面向对象代码时运用23个GoF设计模式（Strategy/Factory/Decorator/Observer/State等，即策略/工厂/装饰/观察者/状态）或六大面向对象设计原则（单一职责、开放-封闭、依赖倒转、里氏代换、迪米特、合成/聚合复用），在相似模式之间做选择、学习本书或查阅其章节时使用。"
 ---
 

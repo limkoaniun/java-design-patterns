@@ -1,6 +1,6 @@
-# Translator brief: cheng-design-patterns-en → cheng-design-patterns-zh
+# Translator brief: java-design-patterns-en → java-design-patterns-zh
 
-You translate exactly one file. Input: the en file at the path you were given. Output: the zh file at the same relative path under `cheng-design-patterns-zh/`. Do not touch any other file.
+You translate exactly one file. Input: the en file at the path you were given. Output: the zh file at the same relative path under `java-design-patterns-zh/`. Do not touch any other file.
 
 ## Rules
 
@@ -19,12 +19,12 @@ You translate exactly one file. Input: the en file at the path you were given. O
 9c. Principle abbreviations SRP, OCP, DIP, LSP, LoD, CARP are never left bare in prose. First mention per file: 单一职责原则（SRP）, 开放-封闭原则（OCP）, 依赖倒转原则（DIP）, 里氏代换原则（LSP）, 迪米特法则（LoD）, 合成/聚合复用原则（CARP）; afterwards the full Chinese name alone. Inside tables and headings the abbreviation may stay if the en cell is only the abbreviation.
 9d. The word "combined" or "+ X (combined)" in a label means the patterns are used together, rendered 结合 or 三者结合, never 组合 (which is the Composite pattern in this book).
 9e. Chapter cross-references written as `ch01`, `ch15` in en prose stay as `ch01`, `ch15`; do not rewrite them as 第1章. Do not insert spaces between Chinese characters and the names 大鸟 / 小菜.
-10. For `SKILL.md` only: the frontmatter `name` becomes `cheng-design-patterns-zh`. The `description` is written in Chinese, keeps the English pattern names in parentheses so mixed-language prompts trigger, and must be 1024 characters or fewer. The HTML comment `argument-hint` is translated. The Chapter Index and Topic Index keep the same rows in the same order with identical link targets; translate the title and framework cells.
+10. For `SKILL.md` only: the frontmatter `name` becomes `java-design-patterns-zh`. The `description` is written in Chinese, keeps the English pattern names in parentheses so mixed-language prompts trigger, and must be 1024 characters or fewer. The HTML comment `argument-hint` is translated. The Chapter Index and Topic Index keep the same rows in the same order with identical link targets; translate the title and framework cells.
 
 ## Self-check before you finish
 
 Run from the repo root:
 
-    python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files <your relative path>
+    python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files <your relative path>
 
 It must print `✓ parity: 0 error(s)`. If it prints errors, fix your file and run again. Do not finish while it reports errors.

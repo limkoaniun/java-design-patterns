@@ -1,11 +1,11 @@
-# Bilingual skill repo: cheng-design-patterns
+# Bilingual skill repo: java-design-patterns
 
 Date: 2026-10-04
 Status: approved design, pending implementation plan
 
 ## Goal
 
-Publish the `cheng-design-patterns` agent skill (generated from 大话设计模式by 程杰 with book-to-skill) as a public GitHub repository containing two complete, parallel skills: one in Chinese, one in English. A user installs one skill and gets the whole knowledge base in that language.
+Publish the `java-design-patterns` agent skill (generated from 大话设计模式by 程杰 with book-to-skill) as a public GitHub repository containing two complete, parallel skills: one in Chinese, one in English. A user installs one skill and gets the whole knowledge base in that language.
 
 ## Decisions already made
 
@@ -19,36 +19,36 @@ Publish the `cheng-design-patterns` agent skill (generated from 大话设计模�
 ## Repository layout
 
 ```
-cheng-design-patterns/                  ~/Dev/projects/cheng-design-patterns
+java-design-patterns/                  ~/Dev/projects/java-design-patterns
 ├── README.md                           中文, opens with "English · 中文" toggle line
 ├── README.en.md                        English, same toggle line
 ├── LICENSE                             covers the repo's own prose and scripts
 ├── docs/specs/…                        this spec and the implementation plan
 ├── tools/check_parity.py               stdlib-only parity checker
-├── cheng-design-patterns-zh/
-│   ├── SKILL.md                        name: cheng-design-patterns-zh
+├── java-design-patterns-zh/
+│   ├── SKILL.md                        name: java-design-patterns-zh
 │   ├── chapters/ch00-oo-basics.md … ch29-pattern-summary.md
 │   ├── glossary.md
 │   ├── patterns.md
 │   └── cheatsheet.md
-└── cheng-design-patterns-en/
-    ├── SKILL.md                        name: cheng-design-patterns-en
+└── java-design-patterns-en/
+    ├── SKILL.md                        name: java-design-patterns-en
     ├── chapters/ch00-oo-basics.md … ch29-pattern-summary.md
     ├── glossary.md
     ├── patterns.md
     └── cheatsheet.md
 ```
 
-Source of the en tree: `~/.agents/skills/cheng-design-patterns` (34 files, ~332 KB), currently untracked inside the private agent-skills repo.
+Source of the en tree: `~/.agents/skills/java-design-patterns` (34 files, ~332 KB), currently untracked inside the private agent-skills repo.
 
 Install commands advertised in the READMEs:
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-zh
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-en
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-zh
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-en
 ```
 
-Local install after publishing: `~/.claude/skills/cheng-design-patterns-zh` and `~/.claude/skills/cheng-design-patterns-en` are symlinks into the new repo. The old `~/.claude/skills/cheng-design-patterns` symlink and the untracked copy in `~/.agents/skills/` are removed.
+Local install after publishing: `~/.claude/skills/java-design-patterns-zh` and `~/.claude/skills/java-design-patterns-en` are symlinks into the new repo. The old `~/.claude/skills/java-design-patterns` symlink and the untracked copy in `~/.agents/skills/` are removed.
 
 ## Translation rules for the zh tree
 
@@ -76,7 +76,7 @@ Every rule below is checked mechanically where possible (see Verification).
 5. **Fenced code blocks** are byte-identical to the en tree, including the info string. Comments inside them are already Chinese.
 6. **Tables** keep the same row and column count. Header cells and prose cells are translated; code and quoted cells are not.
 7. **Terminology** comes from a term table derived from `glossary.md` before any translation starts. Every translator job receives it. Examples: 合成/聚合复用原则, 迪米特法则, 双重锁定, 浅复制/深复制, 透明方式/安全方式.
-8. **Frontmatter**: `name: cheng-design-patterns-zh`; `description` is Chinese, keeps the English pattern names in it so mixed-language prompts still trigger, and stays within the 1024-character loader limit. The `argument-hint` comment is translated.
+8. **Frontmatter**: `name: java-design-patterns-zh`; `description` is Chinese, keeps the English pattern names in it so mixed-language prompts still trigger, and stays within the 1024-character loader limit. The `argument-hint` comment is translated.
 9. **Chapter and topic index tables in SKILL.md** keep the same rows in the same order with the same link targets.
 10. Nothing is added that is not in the en file. The zh tree is a translation, not a revision.
 
@@ -105,7 +105,7 @@ Additional gates:
 
 - `python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py <skill>/SKILL.md` passes for both skills.
 - Human-quality read of three full chapters: ch02 (strategy), ch15 (abstract factory, longest reflection section), ch29 (summary, densest cross-references).
-- Live smoke test: with the zh skill installed, ask 什么是策略模式 and confirm the agent loads `cheng-design-patterns-zh/chapters/ch02-strategy.md` and answers in Chinese.
+- Live smoke test: with the zh skill installed, ask 什么是策略模式 and confirm the agent loads `java-design-patterns-zh/chapters/ch02-strategy.md` and answers in Chinese.
 
 A task is not done while any gate is red.
 
@@ -118,7 +118,7 @@ Both READMEs contain, in this order: the toggle line, one-paragraph description,
 Done last, after every gate above is green:
 
 1. Commit the full tree.
-2. `gh repo create limkoaniun/cheng-design-patterns --public --source . --push`.
+2. `gh repo create limkoaniun/java-design-patterns --public --source . --push`.
 3. Replace the local symlinks as described in Repository layout.
 4. Remove the untracked copy from `~/.agents/skills/`.
 

@@ -1,6 +1,6 @@
 English · [中文](README.md)
 
-# cheng-design-patterns
+# java-design-patterns
 
 Agent skill generated from *大话设计模式* by 程杰 (Cheng Jie) with [book-to-skill](https://github.com/virgiliojr94/book-to-skill). Maintained in two parallel versions, Chinese and English, with a file-for-file matching structure.
 
@@ -11,13 +11,13 @@ It packages the book's 23 GoF design patterns and six OO design principles as a 
 Chinese version:
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-zh
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-zh
 ```
 
 English version:
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-en
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-en
 ```
 
 Claude Code users can instead symlink the folder into `~/.claude/skills/`.

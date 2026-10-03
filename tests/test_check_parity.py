@@ -153,7 +153,7 @@ def test_tag_count_mismatch_is_error(trees, heading_map):
 
 
 SKILL_EN = """---
-name: cheng-design-patterns-en
+name: java-design-patterns-en
 description: "x"
 ---
 
@@ -170,7 +170,7 @@ description: "x"
 - **OCP** → ch04
 """
 
-SKILL_ZH = SKILL_EN.replace("name: cheng-design-patterns-en", "name: cheng-design-patterns-zh") \
+SKILL_ZH = SKILL_EN.replace("name: java-design-patterns-en", "name: java-design-patterns-zh") \
     .replace("## Chapter Index", "## 章节索引").replace("## Topic Index", "## 主题索引")
 
 
@@ -189,8 +189,8 @@ def test_frontmatter_name_must_match_folder(trees, heading_map):
 
 
 def test_frontmatter_name_ok_when_folder_matches(tmp_path, heading_map):
-    en = tmp_path / "cheng-design-patterns-en"
-    zh = tmp_path / "cheng-design-patterns-zh"
+    en = tmp_path / "java-design-patterns-en"
+    zh = tmp_path / "java-design-patterns-zh"
     for d in (en, zh):
         (d / "chapters").mkdir(parents=True)
     (en / "SKILL.md").write_text(SKILL_EN, encoding="utf-8")
@@ -204,7 +204,7 @@ def test_frontmatter_name_ok_when_folder_matches(tmp_path, heading_map):
 
 def test_skill_missing_name_line_is_error(trees, heading_map):
     en, zh, write = trees
-    _skill_pair(write, en, zh, zh_text=SKILL_ZH.replace("name: cheng-design-patterns-zh\n", ""))
+    _skill_pair(write, en, zh, zh_text=SKILL_ZH.replace("name: java-design-patterns-zh\n", ""))
     errs = check_tree(en, zh, heading_map)
     assert any("SKILL.md" in e and "name" in e for e in errs)
 
@@ -285,7 +285,7 @@ def test_straight_quoted_tagged_quote_is_checked(trees, heading_map):
 def test_topic_index_chapter_refs_must_match(trees, heading_map):
     en, zh, write = trees
     en_text = SKILL_EN.replace("- **Strategy** → ch02", "- **Strategy** → ch02, ch04")
-    _skill_pair(write, en, zh, zh_text=en_text.replace("name: cheng-design-patterns-en", "name: cheng-design-patterns-zh")
+    _skill_pair(write, en, zh, zh_text=en_text.replace("name: java-design-patterns-en", "name: java-design-patterns-zh")
                 .replace("## Chapter Index", "## 章节索引").replace("## Topic Index", "## 主题索引").replace("→ ch02, ch04", "→ ch02"))
     write(en, "SKILL.md", en_text)
     errs = check_tree(en, zh, heading_map)
@@ -293,8 +293,8 @@ def test_topic_index_chapter_refs_must_match(trees, heading_map):
 
 
 def test_frontmatter_name_ok_when_run_from_dot(tmp_path, heading_map, monkeypatch):
-    en = tmp_path / "cheng-design-patterns-en"
-    zh = tmp_path / "cheng-design-patterns-zh"
+    en = tmp_path / "java-design-patterns-en"
+    zh = tmp_path / "java-design-patterns-zh"
     for d in (en, zh):
         (d / "chapters").mkdir(parents=True)
     (en / "SKILL.md").write_text(SKILL_EN, encoding="utf-8")

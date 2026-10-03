@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Turn the single English-scaffolded `cheng-design-patterns` skill into a public repo holding two parallel skills, `cheng-design-patterns-en` (frozen copy) and `cheng-design-patterns-zh` (full Chinese translation), verified by a parity checker.
+**Goal:** Turn the single English-scaffolded `java-design-patterns` skill into a public repo holding two parallel skills, `java-design-patterns-en` (frozen copy) and `java-design-patterns-zh` (full Chinese translation), verified by a parity checker.
 
 **Architecture:** The en tree is copied verbatim and only its frontmatter `name` changes. The zh tree is produced one file at a time by independent translator jobs that all read the same brief, heading map, and term table. A stdlib-only checker compares the two trees structurally (files, headings, code blocks, links, quotes, frontmatter, index tables) and is the gate for every translation batch. Publishing happens last.
 
@@ -12,9 +12,9 @@
 
 ## Global Constraints
 
-- Repo root: `~/Dev/projects/cheng-design-patterns`. All relative paths below are from there.
-- Source of the en tree: `~/.agents/skills/cheng-design-patterns` (34 markdown files: `SKILL.md`, `glossary.md`, `patterns.md`, `cheatsheet.md`, `chapters/ch00…ch29`). It is never edited.
-- Skill folder names and frontmatter names: `cheng-design-patterns-zh`, `cheng-design-patterns-en`. They must match exactly.
+- Repo root: `~/Dev/projects/java-design-patterns`. All relative paths below are from there.
+- Source of the en tree: `~/.agents/skills/java-design-patterns` (34 markdown files: `SKILL.md`, `glossary.md`, `patterns.md`, `cheatsheet.md`, `chapters/ch00…ch29`). It is never edited.
+- Skill folder names and frontmatter names: `java-design-patterns-zh`, `java-design-patterns-en`. They must match exactly.
 - SKILL.md frontmatter `description` must be 1024 characters or fewer.
 - No edit to en content beyond the frontmatter `name` line.
 - zh tree: identical file names, identical relative links, byte-identical fenced code blocks, verbatim tagged quotes, headings via the heading map, terms via the term table.
@@ -37,44 +37,44 @@ Inputs the spec implies but no task's tests would otherwise exercise. Each has a
 ### Task 1: Scaffold the repo with the frozen en tree
 
 **Files:**
-- Create: `cheng-design-patterns-en/` (copy of source, 34 files)
+- Create: `java-design-patterns-en/` (copy of source, 34 files)
 - Create: `.gitignore`
 - Create: `LICENSE`
-- Modify: `cheng-design-patterns-en/SKILL.md:2` (frontmatter `name`)
+- Modify: `java-design-patterns-en/SKILL.md:2` (frontmatter `name`)
 
 **Interfaces:**
 - Consumes: nothing.
-- Produces: `cheng-design-patterns-en/` as the fixed source for every later task.
+- Produces: `java-design-patterns-en/` as the fixed source for every later task.
 
 - [ ] **Step 1: Copy the source tree**
 
 ```bash
-cd ~/Dev/projects/cheng-design-patterns
-cp -R ~/.agents/skills/cheng-design-patterns cheng-design-patterns-en
-rm -f cheng-design-patterns-en/README.md cheng-design-patterns-en/.DS_Store
-find cheng-design-patterns-en -name '*.md' | wc -l
+cd ~/Dev/projects/java-design-patterns
+cp -R ~/.agents/skills/java-design-patterns java-design-patterns-en
+rm -f java-design-patterns-en/README.md java-design-patterns-en/.DS_Store
+find java-design-patterns-en -name '*.md' | wc -l
 ```
 Expected: `34`
 
 - [ ] **Step 2: Change the frontmatter name**
 
 ```bash
-sed -i '' '2s/^name: cheng-design-patterns$/name: cheng-design-patterns-en/' cheng-design-patterns-en/SKILL.md
-sed -n '2p' cheng-design-patterns-en/SKILL.md
+sed -i '' '2s/^name: java-design-patterns$/name: java-design-patterns-en/' java-design-patterns-en/SKILL.md
+sed -n '2p' java-design-patterns-en/SKILL.md
 ```
-Expected: `name: cheng-design-patterns-en`
+Expected: `name: java-design-patterns-en`
 
 - [ ] **Step 3: Verify the copy differs from source only on that line**
 
 ```bash
-diff -r ~/.agents/skills/cheng-design-patterns cheng-design-patterns-en
+diff -r ~/.agents/skills/java-design-patterns java-design-patterns-en
 ```
 Expected: exactly two differing lines (the `name:` line) plus `Only in ~/.agents/...: README.md` and possibly `.DS_Store`. Nothing else.
 
 - [ ] **Step 4: Validate the en SKILL.md**
 
 ```bash
-python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-en/SKILL.md
+python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py java-design-patterns-en/SKILL.md
 ```
 Expected: line starting with `✓` and exit code 0.
 
@@ -102,8 +102,8 @@ structure, and scripts.
 - [ ] **Step 6: Commit**
 
 ```bash
-git add .gitignore LICENSE cheng-design-patterns-en
-git commit -m "feat: add frozen English skill tree as cheng-design-patterns-en"
+git add .gitignore LICENSE java-design-patterns-en
+git commit -m "feat: add frozen English skill tree as java-design-patterns-en"
 ```
 
 ---
@@ -117,7 +117,7 @@ git commit -m "feat: add frozen English skill tree as cheng-design-patterns-en"
 - Create: `tests/conftest.py`
 
 **Interfaces:**
-- Consumes: `cheng-design-patterns-en/` layout from Task 1.
+- Consumes: `java-design-patterns-en/` layout from Task 1.
 - Produces:
   - CLI: `python3 tools/check_parity.py EN_DIR ZH_DIR [--files REL ...]`. Exit 0 when no errors, 1 otherwise. Prints one error per line as `path: message`.
   - `check_tree(en_dir: Path, zh_dir: Path, heading_map: dict[str, str], files: list[str] | None = None) -> list[str]`
@@ -360,7 +360,7 @@ def test_tag_count_mismatch_is_error(trees, heading_map):
 
 
 SKILL_EN = """---
-name: cheng-design-patterns-en
+name: java-design-patterns-en
 description: "x"
 ---
 
@@ -377,7 +377,7 @@ description: "x"
 - **OCP** → ch04
 """
 
-SKILL_ZH = SKILL_EN.replace("name: cheng-design-patterns-en", "name: cheng-design-patterns-zh") \
+SKILL_ZH = SKILL_EN.replace("name: java-design-patterns-en", "name: java-design-patterns-zh") \
     .replace("## Chapter Index", "## 章节索引").replace("## Topic Index", "## 主题索引")
 
 
@@ -396,8 +396,8 @@ def test_frontmatter_name_must_match_folder(trees, heading_map):
 
 
 def test_frontmatter_name_ok_when_folder_matches(tmp_path, heading_map):
-    en = tmp_path / "cheng-design-patterns-en"
-    zh = tmp_path / "cheng-design-patterns-zh"
+    en = tmp_path / "java-design-patterns-en"
+    zh = tmp_path / "java-design-patterns-zh"
     for d in (en, zh):
         (d / "chapters").mkdir(parents=True)
     (en / "SKILL.md").write_text(SKILL_EN, encoding="utf-8")
@@ -411,7 +411,7 @@ def test_frontmatter_name_ok_when_folder_matches(tmp_path, heading_map):
 
 def test_skill_missing_name_line_is_error(trees, heading_map):
     en, zh, write = trees
-    _skill_pair(write, en, zh, zh_text=SKILL_ZH.replace("name: cheng-design-patterns-zh\n", ""))
+    _skill_pair(write, en, zh, zh_text=SKILL_ZH.replace("name: java-design-patterns-zh\n", ""))
     errs = check_tree(en, zh, heading_map)
     assert any("SKILL.md" in e and "name" in e for e in errs)
 
@@ -460,7 +460,7 @@ def test_cli_exit_codes(trees):
 - [ ] **Step 4: Run tests to verify they fail**
 
 ```bash
-cd ~/Dev/projects/cheng-design-patterns && touch tools/__init__.py && python3 -m pytest -q tests/test_check_parity.py
+cd ~/Dev/projects/java-design-patterns && touch tools/__init__.py && python3 -m pytest -q tests/test_check_parity.py
 ```
 Expected: collection error `ModuleNotFoundError: No module named 'tools.check_parity'`.
 
@@ -673,9 +673,9 @@ Expected: `22 passed`. If `test_heading_level_sequence_checked_for_unmapped` fai
 - [ ] **Step 7: Run the checker against en vs en as a sanity baseline**
 
 ```bash
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-en
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-en
 ```
-Expected: `✗ parity: 302 error(s)`, and every error line is a heading-map error (`heading ... should be ...`). Confirm with `python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-en | grep -v 'heading ' | grep -vc parity` printing `0`. This proves that on real data the file, code-block, link, quote, tag, frontmatter and index checks are all clean, while the heading check correctly demands Chinese headings.
+Expected: `✗ parity: 302 error(s)`, and every error line is a heading-map error (`heading ... should be ...`). Confirm with `python3 tools/check_parity.py java-design-patterns-en java-design-patterns-en | grep -v 'heading ' | grep -vc parity` printing `0`. This proves that on real data the file, code-block, link, quote, tag, frontmatter and index checks are all clean, while the heading check correctly demands Chinese headings.
 
 - [ ] **Step 8: Commit**
 
@@ -693,13 +693,13 @@ git commit -m "feat: add stdlib parity checker for en/zh skill trees"
 - Create: `docs/translation/brief.md`
 
 **Interfaces:**
-- Consumes: `tools/heading_map.json` (Task 2), `cheng-design-patterns-en/glossary.md` (Task 1).
+- Consumes: `tools/heading_map.json` (Task 2), `java-design-patterns-en/glossary.md` (Task 1).
 - Produces: the two files every translator job in Tasks 4 and 5 reads verbatim.
 
 - [ ] **Step 1: Extract the term pairs from the glossary**
 
 ```bash
-cd ~/Dev/projects/cheng-design-patterns && mkdir -p docs/translation
+cd ~/Dev/projects/java-design-patterns && mkdir -p docs/translation
 {
   echo '# Term table (en → zh)'
   echo
@@ -707,7 +707,7 @@ cd ~/Dev/projects/cheng-design-patterns && mkdir -p docs/translation
   echo
   echo '| English | 中文 |'
   echo '|---|---|'
-  grep -o '^\*\*[^*]*\*\*' cheng-design-patterns-en/glossary.md | sed 's/\*\*//g' | awk -F' / ' 'NF==2 {printf "| %s | %s |\n", $1, $2}'
+  grep -o '^\*\*[^*]*\*\*' java-design-patterns-en/glossary.md | sed 's/\*\*//g' | awk -F' / ' 'NF==2 {printf "| %s | %s |\n", $1, $2}'
 } > docs/translation/terms.md
 grep -c '^| ' docs/translation/terms.md
 ```
@@ -761,9 +761,9 @@ Tags `[DP]` `[DPE]` `[ASD]` `[J&DP]` stay exactly as written.
 `docs/translation/brief.md`:
 
 ```markdown
-# Translator brief: cheng-design-patterns-en → cheng-design-patterns-zh
+# Translator brief: java-design-patterns-en → java-design-patterns-zh
 
-You translate exactly one file. Input: the en file at the path you were given. Output: the zh file at the same relative path under `cheng-design-patterns-zh/`. Do not touch any other file.
+You translate exactly one file. Input: the en file at the path you were given. Output: the zh file at the same relative path under `java-design-patterns-zh/`. Do not touch any other file.
 
 ## Rules
 
@@ -776,13 +776,13 @@ You translate exactly one file. Input: the en file at the path you were given. O
 7. Inline code in backticks stays as-is.
 8. Do not add, remove, or reorder sections, bullets, table rows, or sentences. The zh file is a translation, not a revision. If a sentence seems wrong, translate it faithfully anyway.
 9. Register: 简体中文, technical, concise. Prefer the book's own vocabulary (the term table) over textbook variants. Prefer 「」 only if the en file used plain double quotes "…" for a non-author phrase; keep curly “…” reserved for author quotations as described in rule 4.
-10. For `SKILL.md` only: the frontmatter `name` becomes `cheng-design-patterns-zh`. The `description` is written in Chinese, keeps the English pattern names in parentheses so mixed-language prompts trigger, and must be 1024 characters or fewer. The HTML comment `argument-hint` is translated. The Chapter Index and Topic Index keep the same rows in the same order with identical link targets; translate the title and framework cells.
+10. For `SKILL.md` only: the frontmatter `name` becomes `java-design-patterns-zh`. The `description` is written in Chinese, keeps the English pattern names in parentheses so mixed-language prompts trigger, and must be 1024 characters or fewer. The HTML comment `argument-hint` is translated. The Chapter Index and Topic Index keep the same rows in the same order with identical link targets; translate the title and framework cells.
 
 ## Self-check before you finish
 
 Run from the repo root:
 
-    python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files <your relative path>
+    python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files <your relative path>
 
 It must print `✓ parity: 0 error(s)`. If it prints errors, fix your file and run again. Do not finish while it reports errors.
 ```
@@ -799,10 +799,10 @@ git commit -m "docs: add translator brief and term table"
 ### Task 4: Translate the 30 chapters
 
 **Files:**
-- Create: `cheng-design-patterns-zh/chapters/ch00-oo-basics.md` … `ch29-pattern-summary.md` (30 files)
+- Create: `java-design-patterns-zh/chapters/ch00-oo-basics.md` … `ch29-pattern-summary.md` (30 files)
 
 **Interfaces:**
-- Consumes: `docs/translation/brief.md`, `docs/translation/terms.md`, `tools/heading_map.json`, `cheng-design-patterns-en/chapters/*.md`, `tools/check_parity.py --files`.
+- Consumes: `docs/translation/brief.md`, `docs/translation/terms.md`, `tools/heading_map.json`, `java-design-patterns-en/chapters/*.md`, `tools/check_parity.py --files`.
 - Produces: 30 zh chapter files that pass the checker individually.
 
 Run the jobs in three batches of ten so a systematic mistake in the brief is caught after the first batch, not after all thirty.
@@ -810,7 +810,7 @@ Run the jobs in three batches of ten so a systematic mistake in the brief is cau
 - [ ] **Step 1: Create the target directory**
 
 ```bash
-mkdir -p ~/Dev/projects/cheng-design-patterns/cheng-design-patterns-zh/chapters
+mkdir -p ~/Dev/projects/java-design-patterns/java-design-patterns-zh/chapters
 ```
 
 - [ ] **Step 2: Dispatch batch 1 (ch00–ch09), one job per file, in parallel**
@@ -819,23 +819,23 @@ Each job gets this prompt, with `<FILE>` substituted (for example `chapters/ch02
 
 ```
 You are translating one file of an agent skill from English to Simplified Chinese.
-Repo root: ~/Dev/projects/cheng-design-patterns
+Repo root: ~/Dev/projects/java-design-patterns
 Read, in this order:
   1. docs/translation/brief.md   (the rules; follow every one)
   2. docs/translation/terms.md   (the term table; use it)
   3. tools/heading_map.json      (heading translations; exact strings)
-  4. cheng-design-patterns-en/<FILE>   (your only source)
-Write: cheng-design-patterns-zh/<FILE>
-Then run: python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files <FILE>
+  4. java-design-patterns-en/<FILE>   (your only source)
+Write: java-design-patterns-zh/<FILE>
+Then run: python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files <FILE>
 Fix and re-run until it prints "✓ parity: 0 error(s)". Report the final checker output verbatim.
-Do not edit any file other than cheng-design-patterns-zh/<FILE>.
+Do not edit any file other than java-design-patterns-zh/<FILE>.
 ```
 
 - [ ] **Step 3: Verify batch 1 with the checker**
 
 ```bash
-cd ~/Dev/projects/cheng-design-patterns
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files $(cd cheng-design-patterns-en && ls chapters/ch0*.md)
+cd ~/Dev/projects/java-design-patterns
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files $(cd java-design-patterns-en && ls chapters/ch0*.md)
 ```
 Expected: `✓ parity: 0 error(s)`.
 
@@ -846,15 +846,15 @@ Check by eye: first mention is 策略模式（Strategy）; quotes untouched; hea
 - [ ] **Step 5: Commit batch 1**
 
 ```bash
-git add cheng-design-patterns-zh/chapters/ch0*.md
+git add java-design-patterns-zh/chapters/ch0*.md
 git commit -m "feat(zh): translate chapters ch00-ch09"
 ```
 
 - [ ] **Step 6: Dispatch batch 2 (ch10–ch19) with the same prompt, verify, commit**
 
 ```bash
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files $(cd cheng-design-patterns-en && ls chapters/ch1*.md)
-git add cheng-design-patterns-zh/chapters/ch1*.md
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files $(cd java-design-patterns-en && ls chapters/ch1*.md)
+git add java-design-patterns-zh/chapters/ch1*.md
 git commit -m "feat(zh): translate chapters ch10-ch19"
 ```
 Expected before commit: `✓ parity: 0 error(s)`.
@@ -862,8 +862,8 @@ Expected before commit: `✓ parity: 0 error(s)`.
 - [ ] **Step 7: Dispatch batch 3 (ch20–ch29) with the same prompt, verify, commit**
 
 ```bash
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files $(cd cheng-design-patterns-en && ls chapters/ch2*.md)
-git add cheng-design-patterns-zh/chapters/ch2*.md
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files $(cd java-design-patterns-en && ls chapters/ch2*.md)
+git add java-design-patterns-zh/chapters/ch2*.md
 git commit -m "feat(zh): translate chapters ch20-ch29"
 ```
 Expected before commit: `✓ parity: 0 error(s)`.
@@ -871,8 +871,8 @@ Expected before commit: `✓ parity: 0 error(s)`.
 - [ ] **Step 8: Whole-chapters check**
 
 ```bash
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh --files $(cd cheng-design-patterns-en && ls chapters/*.md)
-ls cheng-design-patterns-zh/chapters | wc -l
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh --files $(cd java-design-patterns-en && ls chapters/*.md)
+ls java-design-patterns-zh/chapters | wc -l
 ```
 Expected: `✓ parity: 0 error(s)` and `30`.
 
@@ -881,10 +881,10 @@ Expected: `✓ parity: 0 error(s)` and `30`.
 ### Task 5: Translate the four root files
 
 **Files:**
-- Create: `cheng-design-patterns-zh/SKILL.md`
-- Create: `cheng-design-patterns-zh/glossary.md`
-- Create: `cheng-design-patterns-zh/patterns.md`
-- Create: `cheng-design-patterns-zh/cheatsheet.md`
+- Create: `java-design-patterns-zh/SKILL.md`
+- Create: `java-design-patterns-zh/glossary.md`
+- Create: `java-design-patterns-zh/patterns.md`
+- Create: `java-design-patterns-zh/cheatsheet.md`
 
 **Interfaces:**
 - Consumes: same kit as Task 4; `tools/validate_skill.py` from book-to-skill.
@@ -895,37 +895,37 @@ Expected: `✓ parity: 0 error(s)` and `30`.
 `<FILE>` is `SKILL.md`, `glossary.md`, `patterns.md`, `cheatsheet.md`. Add this line to the SKILL.md job only:
 
 ```
-Extra for SKILL.md: frontmatter name must be exactly `cheng-design-patterns-zh`; description in Chinese with English pattern names in parentheses, 1024 chars max; keep both index tables' rows, order and link targets identical; translate the "How to Use This Skill" bullets and the "Scope & Limits" and "Supporting Files" text; the source note paragraph at the end is translated too.
+Extra for SKILL.md: frontmatter name must be exactly `java-design-patterns-zh`; description in Chinese with English pattern names in parentheses, 1024 chars max; keep both index tables' rows, order and link targets identical; translate the "How to Use This Skill" bullets and the "Scope & Limits" and "Supporting Files" text; the source note paragraph at the end is translated too.
 ```
 
 - [ ] **Step 2: Full-tree checker**
 
 ```bash
-cd ~/Dev/projects/cheng-design-patterns
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh
+cd ~/Dev/projects/java-design-patterns
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh
 ```
 Expected: `✓ parity: 0 error(s)`. This run has no `--files`, so it also catches extra files in zh.
 
 - [ ] **Step 3: External validator on both SKILL.md files**
 
 ```bash
-python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-en/SKILL.md
-python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-zh/SKILL.md
+python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py java-design-patterns-en/SKILL.md
+python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py java-design-patterns-zh/SKILL.md
 ```
 Expected: both print a `✓` line and exit 0.
 
 - [ ] **Step 4: Description length and name, printed explicitly**
 
 ```bash
-sed -n '2,3p' cheng-design-patterns-zh/SKILL.md | cut -c1-120
-sed -n '3p' cheng-design-patterns-zh/SKILL.md | wc -c
+sed -n '2,3p' java-design-patterns-zh/SKILL.md | cut -c1-120
+sed -n '3p' java-design-patterns-zh/SKILL.md | wc -c
 ```
-Expected: `name: cheng-design-patterns-zh`; the count is 1024 or less.
+Expected: `name: java-design-patterns-zh`; the count is 1024 or less.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add cheng-design-patterns-zh
+git add java-design-patterns-zh
 git commit -m "feat(zh): translate SKILL.md, glossary, patterns, cheatsheet"
 ```
 
@@ -934,7 +934,7 @@ git commit -m "feat(zh): translate SKILL.md, glossary, patterns, cheatsheet"
 ### Task 6: Quality read and fixes
 
 **Files:**
-- Modify (only if a defect is found): `cheng-design-patterns-zh/chapters/ch02-strategy.md`, `ch15-abstract-factory.md`, `ch29-pattern-summary.md`, `SKILL.md`
+- Modify (only if a defect is found): `java-design-patterns-zh/chapters/ch02-strategy.md`, `ch15-abstract-factory.md`, `ch29-pattern-summary.md`, `SKILL.md`
 
 **Interfaces:**
 - Consumes: the complete zh tree.
@@ -942,7 +942,7 @@ git commit -m "feat(zh): translate SKILL.md, glossary, patterns, cheatsheet"
 
 - [ ] **Step 1: Read the three chapters in full against their en source**
 
-Read `cheng-design-patterns-zh/chapters/ch02-strategy.md`, `ch15-abstract-factory.md`, `ch29-pattern-summary.md` side by side with the en files. Record every defect in a scratch list with file, line, and the fix. Defect classes to look for: untranslated English sentence; translated code comment; term not from the term table; a sentence dropped or added; a pattern name without （English） on first mention; mistranslated table cell; broken Markdown (unbalanced `|`, lost bold).
+Read `java-design-patterns-zh/chapters/ch02-strategy.md`, `ch15-abstract-factory.md`, `ch29-pattern-summary.md` side by side with the en files. Record every defect in a scratch list with file, line, and the fix. Defect classes to look for: untranslated English sentence; translated code comment; term not from the term table; a sentence dropped or added; a pattern name without （English） on first mention; mistranslated table cell; broken Markdown (unbalanced `|`, lost bold).
 
 - [ ] **Step 2: Read the zh SKILL.md in full**
 
@@ -951,24 +951,24 @@ Same defect classes, plus: the six-principles table renders; the pattern-selecti
 - [ ] **Step 3: Apply the fixes and re-run the gates**
 
 ```bash
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh
-python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-zh/SKILL.md
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh
+python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py java-design-patterns-zh/SKILL.md
 ```
 Expected: `✓ parity: 0 error(s)` and `✓`.
 
 - [ ] **Step 4: If any defect class appeared in all three chapters, sweep the other 27**
 
-For a systematic defect (same mistake in three of three), grep for it across `cheng-design-patterns-zh/chapters/` and fix every occurrence. Example for untranslated headings that slipped the map:
+For a systematic defect (same mistake in three of three), grep for it across `java-design-patterns-zh/chapters/` and fix every occurrence. Example for untranslated headings that slipped the map:
 
 ```bash
-grep -n '^## [A-Za-z]' cheng-design-patterns-zh/chapters/*.md
+grep -n '^## [A-Za-z]' java-design-patterns-zh/chapters/*.md
 ```
 Expected after fixes: no output. Re-run the checker.
 
 - [ ] **Step 5: Commit**
 
 ```bash
-git add cheng-design-patterns-zh
+git add java-design-patterns-zh
 git commit -m "fix(zh): quality-read corrections"
 ```
 
@@ -989,7 +989,7 @@ git commit -m "fix(zh): quality-read corrections"
 ```markdown
 [English](README.en.md) · 中文
 
-# cheng-design-patterns
+# java-design-patterns
 
 从程杰《大话设计模式》生成的 Agent Skill，使用 [book-to-skill](https://github.com/virgiliojr94/book-to-skill) 构建。中英文两个版本并行维护，结构逐文件对应。
 
@@ -1000,13 +1000,13 @@ git commit -m "fix(zh): quality-read corrections"
 中文版：
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-zh
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-zh
 ```
 
 英文版：
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-en
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-en
 ```
 
 Claude Code 用户也可以把对应文件夹软链接到 `~/.claude/skills/`。
@@ -1033,7 +1033,7 @@ Claude Code 用户也可以把对应文件夹软链接到 `~/.claude/skills/`。
 ```markdown
 English · [中文](README.md)
 
-# cheng-design-patterns
+# java-design-patterns
 
 Agent skill generated from *大话设计模式* by 程杰 (Cheng Jie) with [book-to-skill](https://github.com/virgiliojr94/book-to-skill). Maintained in two parallel versions, Chinese and English, with a file-for-file matching structure.
 
@@ -1044,13 +1044,13 @@ It packages the book's 23 GoF design patterns and six OO design principles as a 
 Chinese version:
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-zh
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-zh
 ```
 
 English version:
 
 ```bash
-npx skills add https://github.com/limkoaniun/cheng-design-patterns --skill cheng-design-patterns-en
+npx skills add https://github.com/limkoaniun/java-design-patterns --skill java-design-patterns-en
 ```
 
 Claude Code users can instead symlink the folder into `~/.claude/skills/`.
@@ -1092,9 +1092,9 @@ git commit -m "docs: bilingual READMEs with language toggle"
 ### Task 8: Publish and switch local install
 
 **Files:**
-- Remote: `github.com/limkoaniun/cheng-design-patterns` (new, public)
+- Remote: `github.com/limkoaniun/java-design-patterns` (new, public)
 - Modify: `~/.claude/skills/` symlinks
-- Delete: `~/.agents/skills/cheng-design-patterns` (untracked copy), `~/.claude/skills/cheng-design-patterns` (old symlink)
+- Delete: `~/.agents/skills/java-design-patterns` (untracked copy), `~/.claude/skills/java-design-patterns` (old symlink)
 
 **Interfaces:**
 - Consumes: the fully green repo from Tasks 1–7.
@@ -1103,11 +1103,11 @@ git commit -m "docs: bilingual READMEs with language toggle"
 - [ ] **Step 1: Final gates, all three, with output captured**
 
 ```bash
-cd ~/Dev/projects/cheng-design-patterns
+cd ~/Dev/projects/java-design-patterns
 python3 -m venv .venv && .venv/bin/pip -q install pytest && .venv/bin/python -m pytest -q
-python3 tools/check_parity.py cheng-design-patterns-en cheng-design-patterns-zh
-python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-en/SKILL.md
-python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py cheng-design-patterns-zh/SKILL.md
+python3 tools/check_parity.py java-design-patterns-en java-design-patterns-zh
+python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py java-design-patterns-en/SKILL.md
+python3 ~/Dev/projects/book-to-skill/tools/validate_skill.py java-design-patterns-zh/SKILL.md
 git status --short
 ```
 Expected: `28 passed`, `✓ parity: 0 error(s)`, two `✓` validator lines, empty status. Stop here if anything is red.
@@ -1122,30 +1122,30 @@ Expected: the merge fast-forwards (main was never advanced independently), the l
 - [ ] **Step 2: Create the public repo and push**
 
 ```bash
-gh repo create limkoaniun/cheng-design-patterns --public --source . --remote origin --push \
+gh repo create limkoaniun/java-design-patterns --public --source . --remote origin --push \
   --description "大话设计模式 as a bilingual (中文/English) agent skill: 23 GoF patterns and 6 OO principles"
-gh repo view limkoaniun/cheng-design-patterns --json url,visibility
+gh repo view limkoaniun/java-design-patterns --json url,visibility
 ```
 Expected: JSON with `"visibility": "PUBLIC"` and the repo URL.
 
 - [ ] **Step 3: Switch the local install to the new repo**
 
 ```bash
-rm ~/.claude/skills/cheng-design-patterns
-ln -s ~/Dev/projects/cheng-design-patterns/cheng-design-patterns-zh ~/.claude/skills/cheng-design-patterns-zh
-ln -s ~/Dev/projects/cheng-design-patterns/cheng-design-patterns-en ~/.claude/skills/cheng-design-patterns-en
+rm ~/.claude/skills/java-design-patterns
+ln -s ~/Dev/projects/java-design-patterns/java-design-patterns-zh ~/.claude/skills/java-design-patterns-zh
+ln -s ~/Dev/projects/java-design-patterns/java-design-patterns-en ~/.claude/skills/java-design-patterns-en
 ls -l ~/.claude/skills | grep cheng
 ```
-Expected: two symlinks, no `cheng-design-patterns` entry.
+Expected: two symlinks, no `java-design-patterns` entry.
 
 - [ ] **Step 4: Remove the untracked copy from the private agent-skills repo**
 
 ```bash
-git -C ~/.agents status --short skills/cheng-design-patterns
-rm -rf ~/.agents/skills/cheng-design-patterns
+git -C ~/.agents status --short skills/java-design-patterns
+rm -rf ~/.agents/skills/java-design-patterns
 git -C ~/.agents status --short | grep cheng || echo "clean"
 ```
-Expected: first command shows `?? skills/cheng-design-patterns/` (confirming it was never committed), last prints `clean`.
+Expected: first command shows `?? skills/java-design-patterns/` (confirming it was never committed), last prints `clean`.
 
 - [ ] **Step 5: Live smoke test of the zh skill**
 
@@ -1154,8 +1154,8 @@ In a fresh Claude Code session in any directory, ask:
 ```
 什么是策略模式？
 ```
-Expected: the session invokes `cheng-design-patterns-zh`, reads `cheng-design-patterns-zh/chapters/ch02-strategy.md` (visible in the tool call), and answers in Chinese with the 商场收银 example and the `[DP]` definition. Record the session's answer summary as evidence in the final report.
+Expected: the session invokes `java-design-patterns-zh`, reads `java-design-patterns-zh/chapters/ch02-strategy.md` (visible in the tool call), and answers in Chinese with the 商场收银 example and the `[DP]` definition. Record the session's answer summary as evidence in the final report.
 
 - [ ] **Step 6: Verify the GitHub rendering**
 
-Open `https://github.com/limkoaniun/cheng-design-patterns` and `…/blob/main/README.en.md`. Expected: the toggle line is the first line on both pages and each link switches language.
+Open `https://github.com/limkoaniun/java-design-patterns` and `…/blob/main/README.en.md`. Expected: the toggle line is the first line on both pages and each link switches language.

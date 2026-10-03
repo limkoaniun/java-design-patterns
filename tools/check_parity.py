@@ -141,8 +141,8 @@ def check_skill(root: Path, rel: str, text: str) -> list[str]:
     if fm is None or "name" not in fm:
         errs.append(f"{rel}: SKILL.md has no frontmatter name")
         return errs
-    if fm["name"] != root.name:
-        errs.append(f"{rel}: frontmatter name {fm['name']!r} != folder {root.name!r}")
+    if fm["name"] != Path(root).resolve().name:
+        errs.append(f"{rel}: frontmatter name {fm['name']!r} != folder {Path(root).resolve().name!r}")
     if len(fm.get("description", "")) > MAX_DESC:
         errs.append(f"{rel}: description is {len(fm['description'])} chars, limit {MAX_DESC}")
     return errs

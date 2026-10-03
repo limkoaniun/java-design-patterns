@@ -290,3 +290,18 @@ def test_topic_index_chapter_refs_must_match(trees, heading_map):
     write(en, "SKILL.md", en_text)
     errs = check_tree(en, zh, heading_map)
     assert any("topic index row 1" in e for e in errs)
+
+
+def test_frontmatter_name_ok_when_run_from_dot(tmp_path, heading_map, monkeypatch):
+    en = tmp_path / "cheng-design-patterns-en"
+    zh = tmp_path / "cheng-design-patterns-zh"
+    for d in (en, zh):
+        (d / "chapters").mkdir(parents=True)
+    (en / "SKILL.md").write_text(SKILL_EN, encoding="utf-8")
+    (zh / "SKILL.md").write_text(SKILL_ZH, encoding="utf-8")
+    (en / "chapters/ch02-strategy.md").write_text(EN_CH, encoding="utf-8")
+    (zh / "chapters/ch02-strategy.md").write_text(ZH_CH, encoding="utf-8")
+    (en / "chapters/ch04-open-closed.md").write_text("# x\n\n## Core Idea\ny\n", encoding="utf-8")
+    (zh / "chapters/ch04-open-closed.md").write_text("# x\n\n## 核心思想\ny\n", encoding="utf-8")
+    monkeypatch.chdir(en)
+    assert check_tree(Path("."), zh, heading_map) == []

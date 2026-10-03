@@ -29,11 +29,11 @@ Claude Code users can instead symlink the folder into `~/.claude/skills/`.
 | `SKILL.md` | Always-loaded entry point: principles table, pattern-selection rules, chapter and topic indexes |
 | `chapters/ch00–ch29` | One file per chapter: frameworks, key concepts, anti-patterns, code example, worked example, takeaways |
 | `glossary.md` | Key terms, 中/英, with chapter references |
-| `patterns.md` | 23 pattern cards: when to use / how / trade-offs |
+| `patterns.md` | 24 pattern cards (GoF 23 + 简单工厂): when to use / how / trade-offs |
 | `cheatsheet.md` | Decision rules, confusable-pattern table, code smells → pattern |
 
-Both versions share one directory layout. `tools/check_parity.py` verifies that files, headings, code blocks, links, and quotations match between them.
+Both versions share one directory layout. `tools/check_parity.py` verifies that files, headings, code blocks, links, and quotations match between them. Run its tests with `python3 -m pytest -q` (pytest required).
 
 ## Note on content
 
-All files are synthesized summaries and reconstructions, not the book's text. Pattern definitions appear as short quotations attributed to 程杰. Code listings were recovered by OCR from the PDF's embedded images and cleaned by hand; they are faithful in structure and naming but may differ from the printed listings in minor details. Please buy the book for the full material.
+All files are synthesized summaries and reconstructions, not the book's text. Pattern definitions appear as short quotations from the book, carrying the book's own citation tags ([DP], [DPE], [ASD], [J&DP]). Code listings were recovered by OCR from the PDF's embedded images and cleaned by hand; they are faithful in structure and naming but may differ from the printed listings in minor details. For the full material, buy the book: [大话设计模式（Java溢彩加强版）](https://book.douban.com/subject/36116620/) by 程杰, Tsinghua University Press, ISBN 978-7-302-61553-8.

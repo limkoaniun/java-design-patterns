@@ -86,7 +86,7 @@ class Marriage extends Action {
 }
 o.display(new Marriage());
 ```
-- **它演示了什么**：`Man.accept` 接收一个 `Action`（分派 1）并调用 `getManConclusion(this)`（分派 2）；新增 `Marriage` 不触动任何已有的类。GoF 的骨架使用 `Visitor.visitConcreteElementA/B`、`Element.accept`、`ObjectStructure.accept(visitor)`，形态相同。
+- **演示内容**：`Man.accept` 接收一个 `Action`（分派 1）并调用 `getManConclusion(this)`（分派 2）；新增 `Marriage` 不触动任何已有的类。GoF 的骨架使用 `Visitor.visitConcreteElementA/B`、`Element.accept`、`ObjectStructure.accept(visitor)`，形态相同。
 
 ## 实战示例
 1. **版本 1**：六行 `System.out.println`，打印男女对比。大鸟：不比 Hello World 好多少。
@@ -106,7 +106,7 @@ o.display(new Marriage());
 
 ## 关联章节
 - **[ch04](ch04-open-closed.md)**：收益（对新增操作开放）与局限（只有在元素不变时才是封闭的）。
-- **[ch16](ch16-state.md)**：状态模式同样消除状态分支，但方式是让对象自身的行为发生改变；访问者模式则把行为整个移出去。
-- **[ch19](ch19-composite.md)**：`ObjectStructure` 常常就是一个组合模式；访问者遍历它。
+- **[ch16](ch16-state.md)**：状态模式（State）同样消除状态分支，但方式是让对象自身的行为发生改变；访问者模式则把行为整个移出去。
+- **[ch19](ch19-composite.md)**：`ObjectStructure` 常常就是一个组合模式（Composite）；访问者遍历它。
 - **[ch20](ch20-iterator.md)**：`ObjectStructure.display` 中的遍历属于迭代关注点。
 - **[ch29](ch29-pattern-summary.md)**：访问者模式在比赛中的答案，新增元素难，新增操作易。

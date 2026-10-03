@@ -25,7 +25,7 @@
 - 优先使用语言自带的 `Iterator`/`ListIterator` 接口，而不是手写抽象类；它们更精简、支持泛型，GoF 版本能做的它们都能做。
 
 ## 反模式
-- **暴露集合的内部**（在客户端返回原始 `ArrayList` 或做索引运算）：每个客户端都因此依赖于存储选择，存储一变就会出错。
+- **暴露集合的内部**（向客户端返回原始 `ArrayList`，或在客户端里做索引运算）：每个客户端都因此依赖于存储选择，存储一变就会出错。
 - **以「一个具体迭代器就够了」为由跳过抽象**：一旦需要反向或带过滤的遍历，就必须重写客户端，而不是换一个迭代器。
 - **在生产环境的 Java 中手写迭代器模式**：Martin Fowler 甚至提议让该模式退役；请使用 `Iterable`/`Iterator` 和 `foreach`。
 
@@ -125,7 +125,7 @@ while (desc.hasPrevious()) System.out.println(desc.previous() + "，请买车票
 5. 学习 GoF 的结构是为了理解语言特性，而不是去重新实现它。
 
 ## 关联章节
-- **[ch19](ch19-composite.md)**：组合模式的树是迭代器模式统一遍历的经典聚合。
+- **[ch19](ch19-composite.md)**：组合模式（Composite）的树是迭代器模式统一遍历的经典聚合。
 - **[ch29](ch29-pattern-summary.md)**：作者的比赛总结把迭代器模式列入行为型模式，并指出其实用价值在下降。
 - **[ch00](ch00-oo-basics.md)**：泛型和集合（`ArrayList<T>`）是内置实现的基础。
 - **Java Collections Framework**：`Iterable`、`Iterator`、`ListIterator` 是该模式的生产化形态。

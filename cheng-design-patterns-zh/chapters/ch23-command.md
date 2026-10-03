@@ -1,10 +1,10 @@
 # 第23章：烤羊肉串引来的思考——命令模式（Command）
 
 ## 核心思想
-把每个请求变成一个对象，这样中间人（服务员）就能对请求排队、记录日志、拒绝或撤销，而请求者无需与执行者（烤肉师傅）见面。顾客直接对着师傅喊的路边摊是紧耦合；用点菜单的餐馆就是命令模式。
+把每个请求变成一个对象，这样中间人（服务员）就能对请求排队、记录日志、拒绝或撤销，而请求者无需与执行者（烤肉师傅）见面。顾客直接对着师傅喊的路边摊是紧耦合；用点菜单的餐馆就是命令模式（Command）。
 
 ## 引入的框架
-- **命令模式（Command）** — “将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。”[DP]
+- **命令模式** — “将一个请求封装为一个对象，从而使你可用不同的请求对客户进行参数化；对请求排队或记录请求日志，以及支持可撤销的操作。”[DP]
   - 适用场景：「行为请求者」与「行为实现者」紧耦合，而你需要对请求**排队**、**记录日志**、让接收者**否决**请求，或支持**撤销/重做**。
   - 做法：(1) 定义抽象的 `Command`，持有一个 `Receiver` 和一个抽象的 `excuteCommand()`；(2) 每个接收者动作对应一个 `ConcreteCommand`，其 `excuteCommand()` 调用该动作；(3) 一个 `Invoker` 保存命令（`setCommand`/`setOrder`）并触发执行（`executeCommand`/`notifyCommand`）；(4) 客户端创建接收者、命令和调用者，并把它们连接起来。
   - 结构：`Invoker`（`-command`、`+setCommand()`、`+executeCommand()`）→ `Command`（`-receiver`、`+excuteCommand()`）⟵ `ConcreteCommand`；`ConcreteCommand` → `Receiver`（`+action()`）。客户端创建 ConcreteCommand 并为其指定 Receiver。
@@ -136,8 +136,8 @@ invoker.executeCommand();
 
 ## 关联章节
 - **[ch04](ch04-open-closed.md)**：新命令通过扩展实现，无需修改现有类。
-- **[ch18](ch18-memento.md)**：备忘录模式提供状态快照，使命令的撤销真正可逆。
-- **[ch24](ch24-chain-of-responsibility.md)**：二者都解耦发送者与接收者；职责链沿处理者传递请求，命令模式则把请求包装成对象交给调用者。
-- **[ch25](ch25-mediator.md)**：服务员在精神上就是一个居中协调的中间人；中介者模式把这种枢纽式协调推广到同事对象之间。
+- **[ch18](ch18-memento.md)**：备忘录模式（Memento）提供状态快照，使命令模式的撤销真正可逆。
+- **[ch24](ch24-chain-of-responsibility.md)**：二者都解耦发送者与接收者；职责链模式（Chain of Responsibility）沿处理者传递请求，命令模式则把请求包装成对象交给调用者。
+- **[ch25](ch25-mediator.md)**：服务员在精神上就是一个居中协调的中间人；中介者模式（Mediator）把这种枢纽式协调推广到同事对象之间。
 - **[ch29](ch29-pattern-summary.md)**：命令模式出现在比赛总结的行为型分组中。
 - **Refactoring to Patterns [R2P]**：「不要添加臆测的命令模式」这一指导的来源。

@@ -1,7 +1,7 @@
 # 第24章：加薪非要老总批？——职责链模式（Chain of Responsibility）
 
 ## 核心思想
-一个请求（请假、加薪）沿着经理 → 总监 → 总经理逐级上传，直到有人有权决定；请求者并不知道最终由谁回答。把塞满级别/类型分支的 `Manager.getResult()` 这一个臃肿方法，替换为一条由处理者子类组成的链，每个处理者持有其后继者的引用。
+一个请求（请假、加薪）沿着经理 → 总监 → 总经理逐级上报，直到有人有权决定；请求者并不知道最终由谁回答。把塞满级别/类型分支的 `Manager.getResult()` 这一个臃肿方法，替换为一条由处理者子类组成的链，每个处理者持有其后继者的引用。
 
 ## 引入的框架
 - **职责链模式（Chain of Responsibility）** — “使多个对象都有机会处理请求，从而避免请求的发送者和接收者之间的耦合关系。将这个对象连成一条链，并沿着这条链传递该请求，直到有一个对象处理它为止。”[DP]
@@ -12,7 +12,7 @@
 
 ## 关键概念
 - **后继者（successor）**：每个处理者持有的唯一引用；没有任何处理者知道整条链。
-- **推卸责任**：转发分支；每个处理者决定是「处理」还是「上传」。
+- **推卸责任**：转发分支；每个处理者决定是「处理」还是「上报」。
 - **Request（申请）**：`requestType`（请假 / 加薪）、`requestContent`、`number`（天数或元数）。
 - **链的结构在客户端定义**：`manager.setSuperior(director); director.setSuperior(generalManager);` — 可随时重新排序。
 - **末端未处理风险**：请求可能到达链尾仍无人处理，或链被配置错误；要预先考虑。
@@ -56,7 +56,7 @@ h2.setSuccessor(h3);                                   // 设置职责链上家�
 int[] requests = { 2, 5, 14, 22, 18, 3, 27, 20 };
 for (int request : requests) h1.handleRequest(request);
 ```
-- **演示了什么**：客户端把所有请求都提交给 `h1`；每个请求由范围与之匹配的处理者处理。
+- **演示内容**：客户端把所有请求都提交给 `h1`；每个请求由范围与之匹配的处理者处理。
 
 ```java
 // 加薪／请假：管理者职责链
@@ -106,7 +106,7 @@ Request r = new Request();
 r.setRequestType("加薪"); r.setRequestContent("小菜请求加薪"); r.setNumber(10000);
 manager.requestApplications(r);     // 客户端不知道最终由谁处理 → 总经理："再说吧"
 ```
-- **演示了什么**：旧的 `getResult` 的各个分支被分摊到每个子类一个级别；客户端只认识第一个经理。
+- **演示内容**：旧的 `getResult` 的各个分支被分摊到每个子类一个级别；客户端只认识第一个经理。
 
 ## 实战示例
 1. **朴素做法**：`Request`（类型、内容、数量）加一个 `Manager` 类，其 `getResult(String managerLevel, Request request)` 嵌套 `if (managerLevel == "经理") … else if ("总监") … else if ("总经理")`，内部再按类型和数量判断。客户端创建三个 `Manager` 对象，并用级别字符串对每个对象调用 `getResult`。
@@ -126,6 +126,6 @@ manager.requestApplications(r);     // 客户端不知道最终由谁处理 → 
 ## 关联章节
 - **[ch03](ch03-single-responsibility.md)** 与 **[ch04](ch04-open-closed.md)**：这次重构由单体经理类中违反单一职责原则和开放-封闭原则所驱动。
 - **[ch16](ch16-state.md)**：状态模式（State）同样用多态类替换分支密集的方法，但它是迁移状态，而不是转发请求。
-- **[ch23](ch23-command.md)**：两者都解耦发送者与接收者；命令模式把请求对象化，职责链模式负责路由请求。
+- **[ch23](ch23-command.md)**：两者都解耦发送者与接收者；命令模式（Command）把请求对象化，职责链模式负责路由请求。
 - **[ch25](ch25-mediator.md)**：中介者模式（Mediator）把协调集中在一个枢纽中，而职责链模式把协调分布在一条链接的序列上。
 - **[ch29](ch29-pattern-summary.md)**：比赛总结把职责链模式归入行为型模式。

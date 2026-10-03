@@ -10,8 +10,8 @@
   - 做法：(1) 每种产品类型一个接口（`IUser`、`IDepartment`）；(2) 每个产品 × 系列组合一个实现；(3) `IFactory` 为每个产品声明一个 `createXxx()`；(4) 每个系列一个具体工厂；(5) 客户端在启动时实例化一次工厂，之后只接触接口。
 - **反射 + 抽象工厂（Reflection + Abstract Factory）** — 用 `Class.forName(packageName + db + "User")` 取代具体工厂类和每一处 `switch(db)`，这样产品系列的选择就成了在运行时解析的*字符串变量*，而不是编译期的类名。
   - 做法：`assemblyName + db + "User"` → `getInstance(className)` → 强制转换为 `IUser`。
-- **反射 + 配置文件（Reflection + properties file）** — 从 `db.properties` 读取 `db=Sqlserver`，这样切换数据库完全不需要改代码，作者称之为对开放-封闭原则的真正落实。
-- **依赖注入（Dependency Injection）** — 被指为这背后的通用思想；作者说像 Spring 这样的 IoC 容器能把它做得更规范，但这里只用反射就够了。
+- **反射 + 配置文件（Reflection + properties file）** — 从 `db.properties` 读取 `db=Sqlserver`，这样切换数据库完全不需要改代码，作者称之为对开放-封闭原则（OCP）的真正落实。
+- **依赖注入（Dependency Injection）** — 被视为其背后的通用思想；作者说像 Spring 这样的 IoC 容器能把它做得正确，但这里只用反射就够了。
 
 ## 关键概念
 - **产品系列（product family）**：属于同一变体的所有具体类（所有 SQL Server 风格的类）。
@@ -24,7 +24,7 @@
 
 ## 心智模型
 - 把工厂想成**某一家供应商的目录**：你只选一次供应商（具体工厂），之后从目录里订任何产品，都保证是这家供应商的。
-- 当**一个产品有多种实现**时用工厂方法模式；一旦在同一组系列旁边出现**第二种产品类型**，就升级为抽象工厂模式。
+- 当**一个产品有多种实现**时用工厂方法模式（Factory Method）；一旦在同一组系列旁边出现**第二种产品类型**，就升级为抽象工厂模式。
 - 把每一处挑选要实例化哪个类的 `switch`/`if` 都当作**反射的候选对象**："所有在用简单工厂的地方，都可以考虑用反射技术来去除switch或if"。
 - 优先用配置而不是重新编译：设计目标是"改动变得最小"，而最好的改动就是改一个文本文件。
 
@@ -32,7 +32,7 @@
 - **在数据库之间全局查找替换**：SQL 方言各不相同（`GetDate()` 与 `Now()`、`Substring` 与 `Mid`、像 `password` 这样需要加 `[ ]` 的保留字），于是两份代码渐行渐远，今后每个功能都要做两遍。
 - **业务代码中的 `SqlserverUser su = new SqlserverUser()`**：客户端被焊死在一个产品系列上，无法使用多态。
 - **每个客户端类里都写 `IFactory factory = new SqlServerFactory()`**：有 100 个调用方，切换一次就要改 100 处——光靠这个模式解决不了这一点。
-- **带有 `switch(db)` 的简单工厂模式 `DataAccess`**（95 分版本）：新增 Oracle 意味着要修改每一个 `case` 块，违反开放-封闭。
+- **带有 `switch(db)` 的简单工厂模式（Simple Factory） `DataAccess`**（95 分版本）：新增 Oracle 意味着要修改每一个 `case` 块，违反开放-封闭。
 - **用加班解决变化**："菜鸟程序员碰到问题，只会用时间来摆平"——作者警告说，手工修补两套代码库本身就是问题，而不是解决办法。
 
 ## 代码示例
@@ -62,7 +62,7 @@ iu.insert(user); iu.getUser(1);
 IDepartment idept = factory.createDepartment();
 idept.insert(department); idept.getDepartment(2);
 ```
-- **演示了什么**：客户端只认识 `IUser`/`IDepartment`；切换整个产品系列只需改一行。
+- **演示内容**：客户端只认识 `IUser`/`IDepartment`；切换整个产品系列只需改一行。
 
 反射 + 配置（最后一级）：
 ```java
@@ -88,16 +88,16 @@ public class DataAccess {
     }
 }
 ```
-- **演示了什么**：没有 `switch`，没有具体工厂类，更换数据库也无需重新编译——新增 Oracle 只需添加 `OracleUser`/`OracleDepartment` 并修改文本中的一行。
+- **演示内容**：没有 `switch`，没有具体工厂类，更换数据库也无需重新编译——新增 Oracle 只需添加 `OracleUser`/`OracleDepartment` 并修改文本中的一行。
 
 ## 参考表
 本章针对数据访问问题的演进阶梯：
 
 | 阶梯 | 设计 | 切换数据库的代价 | 新增产品类型（Project）的代价 | 结论 |
 |---|---|---|---|---|
-| 15.2 | 客户端中的 `new SqlserverUser()` | 全部重写 | 修改客户端 | 紧耦合 |
-| 15.3 | 工厂方法: `IFactory` + `IUser` | 每个客户端都要修改 `new XxxFactory()` | 不适用（只有一个产品） | 只解决一个产品 |
-| 15.4 | 抽象工厂: 工厂创建 User + Department | 每个客户端都要修改 `new XxxFactory()` | 3 个新类 + 修改 `IFactory` 和每个工厂 | 系列切换可行，但仍有 N 处调用点 |
+| 15.2 | 客户端中的 `new SqlserverUser()` | 全部重写 | 修改客户端 | 耦合 |
+| 15.3 | 工厂方法：`IFactory` + `IUser` | 每个客户端都要修改 `new XxxFactory()` | 不适用（只有一个产品） | 只解决一个产品 |
+| 15.4 | 抽象工厂：工厂创建 User + Department | 每个客户端都要修改 `new XxxFactory()` | 3 个新类 + 修改 `IFactory` 和每个工厂 | 系列切换可行，但仍有 N 处调用点 |
 | 15.7 | 带 `switch(db)` 的简单工厂 `DataAccess` | 修改一个 `db` 字符串 | 新增一个 `createProject()` | "95分"：新增 Oracle 要修改每个 `switch` |
 | 15.8 | 反射 + 抽象工厂 | 修改一个 `db` 字符串，重新编译 | 新增类 + 一个 `createProject()` | 没有 switch；仍需重新编译 |
 | 15.9 | 反射 + `db.properties` | 编辑一个文本文件 | 同上 | "满分"：开放-封闭得到充分遵守 |
@@ -116,7 +116,7 @@ public class DataAccess {
 为什么有效：每一级都把又一个决定移出已编译的客户端代码——先移出客户端（接口），再移出工厂层次结构（反射），最后彻底移出二进制文件（配置）。
 
 ## 关键要点
-1. 当存在**系列 × 产品类型**时才用抽象工厂模式；只有单一产品类型时，工厂方法模式就够了。
+1. 当存在**系列 × 产品类型**时用抽象工厂模式；只有单一产品类型时，工厂方法模式就够了。
 2. 这个模式的收益是具体工厂只被命名**一次**；代价是每新增一种产品类型，都要修改工厂接口和所有工厂。
 3. 任何选择要 `new` 哪个类的 `switch`/`if`，都可以替换成 `Class.forName(prefix + variable + suffix)`。
 4. 把变量推到 properties 文件里，换数据库就只是改配置而不是重新构建——这就是作者对开放-封闭的标准。

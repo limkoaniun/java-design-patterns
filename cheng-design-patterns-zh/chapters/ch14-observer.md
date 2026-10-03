@@ -9,12 +9,12 @@
   - 动机 [DP]：“将一个系统分割成一系列相互协作的类有一个很不好的副作用，那就是需要维护相关对象间的一致性。我们不希望为了维持一致性而使各类紧密耦合”.
   - 适用场景：“当一个对象的改变需要同时改变其他对象的时候，而且它不知道具体有多少对象有待改变时”；另外，当“一个抽象模型有两个方面，其中一方面依赖于另一方面”并且希望两方面各自独立变化时，也适用。
   - 做法：(1) 定义带有 `update()` 的 `Observer`。(2) 定义持有观察者列表并带有 `attach/detach/notify` 的 `Subject`。(3) 具体主题先设置状态，再调用 `notify()`。(4) 具体观察者实现 `update()`，并通过抽象类型读取主题。(5) 客户端用 `attach()` 把它们连接起来。
-  - 为何有效：“观察者模式所做的工作其实就是在解除耦合。让耦合的双方都依赖于抽象，而不是依赖于具体。” 失效情形：具体观察者若回头强制转换为具体主题（`(Boss) o`），会悄悄恢复耦合。
+  - 为何有效：“观察者模式所做的工作其实就是在解除耦合。让耦合的双方都依赖于抽象，而不是依赖于具体。” 失效模式：具体观察者若回头强制转换为具体主题（`(Boss) o`），会悄悄恢复耦合。
 - **Java 内置支持: `java.util.Observable` / `java.util.Observer`** — `Observable` 已经提供了 `addObserver`、`deleteObserver`、`setChanged`、`notifyObservers`；观察者实现 `update(Observable o, Object arg)`。作者强调的限制：`Observable` 是一个*类*，而 Java 没有多重继承，所以你的主题无法再继承其他类——并且 `javac` 会给出警告 `[deprecation] java.util中的Observable已过时`。要在了解这一点的前提下使用，或者自己写抽象的 `Subject`。
 
 ## 关键概念
 - **主题 / 抽象通知者（Subject）**：用集合保存观察者引用；提供 attach/detach。
-- **观察者（Observer）**：更新接口；通常只有一个 `update()` 方法，即「更新方法」。
+- **观察者（Observer）**：更新接口；通常只有一个 `update()` 方法，即"更新方法"。
 - **具体通知者（ConcreteSubject）**：保存状态；状态变化时通知每一个已注册的观察者。
 - **具体观察者（ConcreteObserver）**：让自身状态与主题同步；可持有主题的引用。
 - **双向耦合（bidirectional coupling）**：最初的缺陷——`Secretary` 列出 `StockObserver`，而 `StockObserver` 又持有 `Secretary`。
@@ -30,7 +30,7 @@
 
 ## 反模式
 - **主题绑定到具体观察者**（`ArrayList<StockObserver>`）：新增一个 `NBAObserver` 就得修改 `Secretary`——违反开放-封闭原则（OCP）。
-- **观察者绑定到具体主题**（`protected Secretary sub;`）：当通知者变成 `Boss` 时，每个观察者都要修改。小菜的第二版只修复了一边；大鸟称之为「只完成一半」。
+- **观察者绑定到具体主题**（`protected Secretary sub;`）：当通知者变成 `Boss` 时，每个观察者都要修改。小菜的第二版只修复了一边；大鸟称之为"只完成一半"。
 - **在 `update(Observable o, ...)` 内部做强制转换**（`Boss b = (Boss) o;`）：JDK 的签名诱导你这么做，而这会让具体观察者与具体主题重新耦合；应当转换为你自己的抽象 `Subject`。
 - **需要另一个父类时仍继承 `Observable`**：在 Java 中不可能；JDK 的这个类正是因为这种复用上的限制而被弃用。
 - **忘记 `detach()`**：无法移除观察者的主题（对某个同事生气的前台）会泄漏通知和引用。
@@ -82,7 +82,7 @@ boss1.detach(employee1);            // 魏关姹 was never reached — and got c
 boss1.setAction("我胡汉三回来了");
 boss1.notifyEmployee();
 ```
-- **演示了什么**：两个方向都依赖于抽象；把 `Secretary` 换成 `Boss`，或者新增一种观察者，都不会触及任何已有的类。
+- **演示内容**：两个方向都依赖于抽象；把 `Secretary` 换成 `Boss`，或者新增一种观察者，都不会触及任何已有的类。
 
 ```java
 // Using the JDK's Observable, without re-coupling to the concrete subject
@@ -111,7 +111,7 @@ Boss boss1 = new Boss("胡汉三");
 boss1.addObserver(new StockObserver("魏关姹"));
 boss1.setAction("我胡汉三回来了");
 ```
-- **演示了什么**：`Observable` 省去了 attach/detach/notify 的样板代码；中间层 `Subject` 让观察者远离具体的 `Boss`。注意弃用警告以及单继承的代价。
+- **演示内容**：`Observable` 省去了 attach/detach/notify 的样板代码；中间层 `Subject` 让观察者远离具体的 `Boss`。注意弃用警告以及单继承的代价。
 
 ## 参考表
 | 版本 | 主题一侧 | 观察者一侧 | 结果 |
@@ -122,7 +122,7 @@ boss1.setAction("我胡汉三回来了");
 | 4. JDK `Observable` | `Subject extends Observable` | `implements Observer`，转换为 `Subject` | 代码更少；受单继承限制；已弃用 |
 
 ## 实战示例
-**故事：** 老板不在时，同事们在看股票行情。前台童子喆在老板回来时给其中一位同事打电话；大家手忙脚乱。有一天老板带着童子喆走进来（她根本没来得及打电话），背对着门的魏关姹冲着老板的脸大喊「我的股票涨停了哦」。
+**故事：** 老板不在时，同事们在看股票行情。前台童子喆在老板回来时给其中一位同事打电话；大家手忙脚乱。有一天老板带着童子喆走进来（她根本没来得及打电话），背对着门的魏关姹冲着老板的脸大喊"我的股票涨停了哦"。
 
 **第一版：** `Secretary` 带有 `attach(StockObserver)`、`notifyEmployee()` 和 `setAction("老板回来了")`；`StockObserver` 持有一个 `Secretary`，并在 `update()` 中打印她的动作。能工作，但这两个类彼此具体引用。新增一位看 NBA 的同事就意味着要修改 `Secretary`。
 

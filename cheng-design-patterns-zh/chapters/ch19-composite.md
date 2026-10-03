@@ -70,7 +70,7 @@ comp.add(comp2);
 Leaf leaf2 = new Leaf("Leaf D"); root.add(leaf2); root.remove(leaf2);   // "被风吹走了"
 root.display(1);
 ```
-- **演示了什么**：在根节点上调用一次 `display(1)` 就能遍历整棵树；深度通过递归逐层传递。
+- **演示内容**：在根节点上调用一次 `display(1)` 就能遍历整棵树；深度通过递归逐层传递。
 
 公司管理系统：
 ```java
@@ -108,7 +108,7 @@ ConcreteCompany comp3 = new ConcreteCompany("杭州办事处"); /* + HR, Finance
 root.display(1);
 root.lineOfDuty();     // every department at every level performs its duty
 ```
-- **演示了什么**：加入组件接口的领域操作（`lineOfDuty`）会在整棵树中传播，客户端无需任何类型检查。
+- **演示内容**：加入组件接口的领域操作（`lineOfDuty`）会在整棵树中传播，客户端无需任何类型检查。
 
 ## 参考表
 | | 透明方式 | 安全方式 |

@@ -1,7 +1,7 @@
 # 第16章：无尽加班何时休——状态模式（State）
 
 ## 核心思想
-当对象的行为取决于它的状态，而状态转移逻辑已经变成一长串 `if/else` 时，把每个状态放进各自的类，让这些状态彼此交接控制权。「Long Method」坏味道是触发信号，状态模式是解药。
+当对象的行为取决于它的状态，而状态转移逻辑已经变成一长串 `if/else` 时，把每个状态放进各自的类，让这些状态彼此交接控制权。「Long Method」坏味道是触发信号，该模式是解药。
 
 ## 引入的框架
 - **状态模式（State）** — “当一个对象的内在状态改变时允许改变其行为，这个对象看起来像是改变了其类。”[DP]
@@ -21,7 +21,7 @@
 
 ## 心智模型
 - 把每个状态类看作**状态表中的一行**，同时负责「我做什么」和「何时交接」。
-- 当*同一个*方法调用必须随时间表现出不同行为时，用状态模式；当*调用方*预先选定算法时，用策略模式。
+- 当*同一个*方法调用必须随时间表现出不同行为时，用状态模式；当*调用方*预先选定算法时，用策略模式（Strategy）。
 - 如果状态判断只是一个简单的 `if`，就不要用这个模式："如果这个状态判断很简单，那就没必要用状态模式了"。
 - 问一句「规则变化时哪些行会变？」——用状态模式，答案是一个类，而不是一个庞大的方法。
 
@@ -56,7 +56,7 @@ class Context {
 Context c = new Context(new ConcreteStateA());
 c.request(); c.request(); c.request();   // A→B→A→B
 ```
-- **演示了什么**：上下文从不做分支判断；每个状态自己指明后继状态。
+- **演示内容**：上下文从不做分支判断；每个状态自己指明后继状态。
 
 加班程序的状态模式版本：
 ```java
@@ -103,7 +103,7 @@ emergencyProjects.setHour(9);  emergencyProjects.writeProgram();
 emergencyProjects.setHour(17); emergencyProjects.setWorkFinished(false); emergencyProjects.writeProgram();
 emergencyProjects.setHour(22); emergencyProjects.writeProgram();
 ```
-- **演示了什么**：客户端代码与多分支版本相比没有变化，但每条规则都落在一个小类里。
+- **演示内容**：客户端代码与多分支版本相比没有变化，但每条规则都落在一个小类里。
 
 ## 实战示例
 小菜描述了他的一天：早上精神百倍，中午犯困，下午恢复，加班时疲惫不堪，除非任务完成，否则 21:00 之后就睡着了。
@@ -127,6 +127,6 @@ emergencyProjects.setHour(22); emergencyProjects.writeProgram();
 ## 关联章节
 - **[ch03](ch03-single-responsibility.md)**、**[ch04](ch04-open-closed.md)**：Long Method 恰恰是用这两条原则诊断出来的。
 - **[ch02](ch02-strategy.md)**：类的形状相同（上下文 + 抽象类 + 具体类）；区别在于谁来选择——客户端（策略模式）还是状态自己（状态模式）。
-- **[ch24](ch24-chain-of-responsibility.md)**：同样是沿着一系列对象传递请求，但职责链模式的链由客户端固定，而状态会自己选择后继。
+- **[ch24](ch24-chain-of-responsibility.md)**：同样是沿着一系列对象传递请求，但职责链模式（Chain of Responsibility）的链由客户端固定，而状态会自己选择后继。
 - **[ch29](ch29-pattern-summary.md)**：比赛中的行为型分组把状态模式与其同类模式做了比较。
 - **重构（Fowler）**：「Long Method」和「Replace Conditional with State/Strategy」是本章背后的具名重构手法。

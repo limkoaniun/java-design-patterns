@@ -7,7 +7,7 @@
 - **适配器模式（Adapter）** — “将一个类的接口转换成客户希望的另外一个接口。Adapter模式使得原本由于接口不兼容而不能一起工作的那些类可以一起工作。”[DP]
   - 结构：`Target`（`request()`，客户端所期望的接口，可以是具体类、抽象类或接口）← `Adapter`（继承/实现 Target，持有私有的 `Adaptee`，其 `request()` 调用 `adaptee.specificRequest()`）；`Adaptee`（`specificRequest()`，被适配的类）。
   - 适用场景："两个类所做的事情相同或相似，但是具有不同的接口时"；复用遗留代码或第三方组件，而其接口你不会也不能修改。
-  - 做法：(1) 确定客户端已在调用的 `Target` 接口；(2) 创建继承 `Target` 的 `Adapter`；(3) 在其内部组合 `Adaptee`；(4) 通过转发到 Adaptee 中名称不同的方法来实现每个 Target 方法。
+  - 做法：(1) 确定客户端已在调用的 `Target` 接口；(2) 创建继承 `Target` 的 `Adapter`；(3) 在其内部合成 `Adaptee`；(4) 通过转发到 Adaptee 中名称不同的方法来实现每个 Target 方法。
 - **类适配器 vs 对象适配器（class vs object adapter）** — GoF 两种形式都有描述；类适配器需要多重继承，而 Java/C#/VB.NET 不支持，所以本书只讲*对象适配器*（合成）。
 - **扁鹊三兄弟（the three physician brothers）** — 作者的时机启发法：事前控制（设计一致的接口）> 事中控制（立即重构小的不匹配）> 事后控制（别无他法时才适配）。
 
@@ -15,10 +15,10 @@
 - **Target**："这是客户所期待的接口"。
 - **Adaptee**："需要适配的类" — 数据和行为正确，接口错误。
 - **Adapter**："通过在内部包装一个Adaptee对象，把源接口转换成目标接口"。
-- **接口不符**：系统的数据和行为都是对的，只是方法名/签名不同。
-- **控制范围之外**：触发条件 — 被适配者是遗留代码、其他团队的代码或供应商组件。
+- **接口不符（interface mismatch）**：系统的数据和行为都是对的，只是方法名/签名不同。
+- **控制范围之外（outside your control）**：触发条件 — 被适配者是遗留代码、其他团队的代码或供应商组件。
 - **DataAdapter (.NET)**：作者的真实案例；`Fill` 和 `Update` 在任意数据源与统一的 `DataSet` 之间做映射。
-- **翻译者**：本章的适配器，让说英语的教练能够指挥说中文的中锋。
+- **翻译者（Translator）**：本章的适配器，让说英语的教练能够指挥说中文的中锋。
 
 ## 心智模型
 - 把适配器想成**旅行转换插头**：它改变的是插座的形状，而不是电。
@@ -46,7 +46,7 @@ class Adapter extends Target {
 Target target = new Adapter();
 target.request();   // client calls Target.request(); Adaptee.specificRequest() runs
 ```
-- **说明了什么**：客户端不变；只有适配器同时懂得两套词汇。
+- **演示内容**：客户端不变；只有适配器同时懂得两套词汇。
 
 篮球翻译：
 ```java
@@ -81,7 +81,7 @@ Player forwards = new Forwards("巴蒂尔");   forwards.attack();
 Player guards   = new Guards("麦克格雷迪"); guards.attack();
 Player center   = new Translator("姚明");   center.attack(); center.defense();
 ```
-- **说明了什么**：教练的代码（`Player.attack()/defense()`）从不改变；`Translator` 把 `attack` 映射到 `进攻`，把 `defense` 映射到 `防守`。
+- **演示内容**：教练的代码（`Player.attack()/defense()`）从不改变；`Translator` 把 `attack` 映射到 `进攻`，把 `defense` 映射到 `防守`。
 
 ## 实战示例
 背景：姚明来到 NBA，不会说英语。教练和队友不会学中文；姚明也不可能一夜之间学会英语。解决办法：请一位翻译。
@@ -89,7 +89,7 @@ Player center   = new Translator("姚明");   center.attack(); center.defense();
 1. **朴素模型**：`Player` 抽象类带有 `attack()`/`defense()`；子类 `Forwards`、`Center`、`Guards`；`new Center("姚明")`。这是错的 — 它假装姚明已经听得懂 `attack`。
 2. **现实情况**：`ForeignCenter` 是一个独立的类，方法为 `进攻()`/`防守()`，`name` 是属性风格（刻意与其他球员的构造器风格不同，以强调它写自别处）。
 3. **三种选择**：教姚明英语（修改被适配者 — 短期内不现实）、教所有人中文（修改每个客户端 — 荒谬）、雇一个翻译（适配器）。
-4. **适配器**：`Translator extends Player`，组合一个 `ForeignCenter`，把 `attack()` 转发到 `进攻()`，把 `defense()` 转发到 `防守()`。客户端那一行变成 `Player center = new Translator("姚明")`，客户端其余部分不动。
+4. **适配器**：`Translator extends Player`，合成一个 `ForeignCenter`，把 `attack()` 转发到 `进攻()`，把 `defense()` 转发到 `防守()`。客户端那一行变成 `Player center = new Translator("姚明")`，客户端其余部分不动。
 5. **现实世界的印证**：.NET 的 `DataAdapter` 通过 `Fill`/`Update` 把 SQL Server / Oracle / Access / DB2 数据源适配成一个 `DataSet`；Java 中 Hibernate 也做了类似的事。
 6. **刹车**：大鸟讲了扁鹊的故事 — 有名的哥哥治疗重病，无名的大哥预防疾病。适配器模式是外科医生；良好的接口设计是大哥。
 
@@ -97,7 +97,7 @@ Player center   = new Translator("姚明");   center.attack(); center.defense();
 
 ## 关键要点
 1. 当数据和行为正确但接口错误，*并且*不匹配的类在你的控制范围之外时，使用适配器模式。
-2. 在 Java 中实现为对象适配器：继承 `Target`，组合 `Adaptee`，转发每个方法。
+2. 在 Java 中实现为对象适配器：继承 `Target`，合成 `Adaptee`，转发每个方法。
 3. 集成第三方组件而你不应照搬其接口时，这确实是一种设计期的选择。
 4. 在你自己的代码库内，先用规范和重构修正命名；适配自己的不一致属于事后控制。
 5. 优先顺序：防止不匹配（事前）> 尽早重构（事中）> 适配（事后）。

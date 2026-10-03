@@ -72,7 +72,7 @@ public void paint(Graphics g) {
     new PersonDirector(new PersonFatBuilder(g)).createPerson();
 }
 ```
-- **演示了什么**：客户端指定产品；编译器保证完整性；Director 保证顺序。
+- **演示内容**：客户端指定产品；编译器保证完整性；Director 保证顺序。
 
 ```java
 // Generic base code
@@ -102,7 +102,7 @@ director.construct(b1);
 Product p1 = b1.getResult();
 p1.show();
 ```
-- **演示了什么**：结构图中的四个角色；同一个 `construct()` 配合不同的建造者产生不同的产品。
+- **演示内容**：结构图中的四个角色；同一个 `construct()` 配合不同的建造者产生不同的产品。
 
 ## 参考表
 | 版本 | 流程在哪里 | 可复用？ | 部件会被遗漏吗？ |
@@ -131,7 +131,7 @@ p1.show();
 
 ## 关联章节
 - **[ch10](ch10-template-method.md)**：模板方法模式通过继承固定步骤顺序；建造者模式则通过驱动注入建造者的 Director 来固定。
-- **[ch15](ch15-abstract-factory.md)**：抽象工厂模式（Abstract Factory）创建部件的产品族；建造者模式则一步步组装一个复杂产品。
+- **[ch15](ch15-abstract-factory.md)**：抽象工厂模式（Abstract Factory）创建部件的产品系列；建造者模式则一步步组装一个复杂产品。
 - **[ch05](ch05-dependency-inversion.md)**：「饭菜依赖厨师」这一观察就是依赖倒转原则——依赖流程抽象，而不是具体的执行者。
 - **[ch08](ch08-factory-method.md)**：两者都是创建型；创建单个对象用工厂方法模式（Factory Method），对象有多个必需部件时用建造者模式。
 - **[ch29](ch29-pattern-summary.md)**：建造者模式向评委解释了内聚/耦合——内部高内聚，外部接触少。

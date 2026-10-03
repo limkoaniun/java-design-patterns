@@ -115,7 +115,7 @@
 
 ### 策略（Strategy）(ch02)
 **何时使用**：一族可互换的算法（正常收费/打折/返利）。
-**做法**：`CashSuper { acceptCash(price, num) }`；`CashContext` 持有一个策略；在上下文的构造函数中配合简单工厂模式，使客户端只需传入一个字符串。
+**做法**：`CashSuper { acceptCash(price, num) }`；`CashContext` 持有一个策略；在 Context（上下文）的构造函数中配合简单工厂模式，使客户端只需传入一个字符串。
 **取舍**：消除算法的 `switch`；除非用工厂把策略隐藏起来，否则客户端必须了解这些策略。
 
 ### 模板方法（Template Method）(ch10)

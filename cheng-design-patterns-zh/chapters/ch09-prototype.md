@@ -8,7 +8,7 @@
   - 结构：`Prototype { +clone() }`（声明自我克隆的接口）；`ConcretePrototype1/2 { +clone() }`（自行实现克隆）。在 Java 中抽象的 `Prototype` 并不必要：实现 `Cloneable` 并重写 `clone()` 即可。
   - 适用场景：对象初始化代价高昂，或初始状态稳定而你需要多个近乎相同的实例；你想捕获对象的运行时状态并重现它（"不用重新初始化对象，而是动态地获得对象运行时的状态"）。
   - 做法：(1) `class X implements Cloneable`；(2) 重写 `public X clone()`，在 `try/catch(CloneNotSupportedException)` 中调用 `super.clone()`；(3) 如果 `X` 持有必须相互独立的引用类型字段，就在 `clone()` 中把它们也克隆一份（深复制）；(4) 客户端调用 `x.clone()`，然后调整副本。
-  - 为什么有效：`super.clone()` 绕过构造函数并按位复制字段，所以重复创建时不必再次执行昂贵的初始化。失败模式：浅复制共享被引用的对象，所以编辑一个副本会悄悄地编辑所有副本。
+  - 为什么有效：`super.clone()` 绕过构造函数并按位复制字段，所以重复创建时不必再次执行昂贵的初始化。失效模式：浅复制共享被引用的对象，所以编辑一个副本会悄悄地编辑所有副本。
 - **浅复制（shallow copy）**："被复制对象的所有变量都含有与原来的对象相同的值，而所有的对其他对象的引用都仍然指向原来的对象。" 这就是 `super.clone()` 给你的结果。
 - **深复制（deep copy）**："把引用对象的变量指向复制过的新对象，而不是原有的被引用的对象." 你通过在 `clone()` 中克隆每个被引用的对象来实现它。要事先决定深度，并留意循环引用。
 
@@ -54,7 +54,7 @@ class ConcretePrototype extends Prototype {
 ConcretePrototype p1 = new ConcretePrototype("编号123456");
 ConcretePrototype c1 = (ConcretePrototype) p1.clone();   // no constructor run
 ```
-- **演示了什么**：基于克隆的创建；在 Java 中，`Cloneable` + `clone()` 就是你所需要的全部。
+- **演示内容**：基于克隆的创建；在 Java 中，`Cloneable` + `clone()` 就是你所需要的全部。
 
 简历的深复制（最终版本）：
 
@@ -100,7 +100,7 @@ resume3.setPersonalInfo("男", "24");
 resume3.setWorkExperience("2003-2006", "ZZ公司");
 resume1.display(); resume2.display(); resume3.display();   // three different work histories
 ```
-- **演示了什么**：一行代码（`object.work = this.work.clone()`）就把浅复制变成了深度为一层的深复制，这个示例只需要这些。
+- **演示内容**：一行代码（`object.work = this.work.clone()`）就把浅复制变成了深度为一层的深复制，这个示例只需要这些。
 
 ## 实战示例
 1. **版本 1——手写时代**：`Resume` 只有 `String` 字段；客户端用相同的 setter 调用 `new Resume(...)` 三次。能用，但每次改动都要改 N 处。捷径 `resume2 = resume1` 被否决：那是传引用，三个名字指向同一个对象。

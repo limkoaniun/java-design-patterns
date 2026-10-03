@@ -16,8 +16,8 @@
 
 ### 抽象工厂（Abstract Factory）(ch15)
 **何时使用**：需要整体替换的一族相关产品（SQL Server 与 MySQL 的全部 DAO）。
-**做法**：`IFactory { createUser(); createDepartment() }`，每个产品族一个具体工厂。用简单工厂模式 + `Class.forName(assemblyName + "." + db + "User")` + 属性文件来缓解工厂类的膨胀。
-**取舍**：替换产品族只需改一行；但增加*新的产品类型*会波及每一个工厂。
+**做法**：`IFactory { createUser(); createDepartment() }`，每个产品系列一个具体工厂。用简单工厂模式 + `Class.forName(assemblyName + "." + db + "User")` + 属性文件来缓解工厂类的膨胀。
+**取舍**：替换产品系列只需改一行；但增加*新的产品类型*会波及每一个工厂。
 
 ### 建造者（Builder）(ch13)
 **何时使用**：对象需要许多有序的构建步骤，且同样的步骤能产生不同的表示。

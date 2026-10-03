@@ -1,7 +1,7 @@
 # 第0章：楔子 培训实习生——面向对象基础（Prologue: OO Fundamentals via the "Animal Sports Meet"）
 
 ## 核心思想
-面向对象编程不是语法，而是一种把行为放到正确位置的方法，使重复消失、变化保持局部。作者通过演进一个极小的程序（一只会喵喵叫的猫），把封装（Encapsulation）、继承（Inheritance）、多态（Polymorphism）、抽象类（Abstract class）和接口（Interface）逐一讲清，最终得到一个多态的「动物运动会」，每一步都针对重复做重构（Refactoring）。
+面向对象编程不是语法，而是一种把行为放到正确位置的方法，使重复消失、变化保持局部。作者通过演进一个极小的程序（一只会喵喵叫的猫），把封装（Encapsulation）、继承（Inheritance）、多态（Polymorphism）、抽象类（Abstract class）和接口（Interface）逐一讲清，最终得到一个多态的"动物运动会"，每一步都针对重复做重构（Refactoring）。
 
 ## 引入的框架
 - **类与实例（Class and Instance）** — “类就是具有相同的属性和功能的对象的抽象的集合”；实例是“一个真实的对象”，用 `new` 创建。
@@ -34,7 +34,7 @@
 ## 反模式
 - **因为代码看起来相似就让 Dog extends Cat**：此后猫的每个新行为（爬树、抓老鼠）都会泄漏到 Dog 中。代码相似不等于 is-a 关系。
 - **Ctrl+C / Ctrl+V 式复用**：五个动物类有 90% 相同的方法体；喊叫格式改一个字就要改五处。
-- **为了让多态生效而把「变出东西」放到 `Animal` 上**：迫使每个动物都拥有只有三个特殊动物才有的行为。应改用接口。
+- **为了让多态生效而把"变出东西"放到 `Animal` 上**：迫使每个动物都拥有只有三个特殊动物才有的行为。应改用接口。
 - **用公共字段代替属性**：「没有纱窗的窗户」：任何人随时都可以写入任何内容。
 - **用定长数组存放不断增长的名单**：`new Animal[5]` 任意限制了报名人数；应使用泛型列表。
 
@@ -75,7 +75,7 @@ public class Dog extends Animal {
     protected String getShoutSound() { return "汪"; }
 }
 ```
-- **说明了什么**：继承消除了重复；多态让 `Animal` 引用分派到 `Cat`/`Dog`；抽象的 `getShoutSound()` 是模板方法模式（Template Method）(ch10) 的雏形。
+- **演示内容**：继承消除了重复；多态让 `Animal` 引用分派到 `Cat`/`Dog`；抽象的 `getShoutSound()` 是模板方法模式（Template Method）(ch10) 的雏形。
 
 用接口表达跨越不相关类的行为，加上泛型集合的客户端：
 
@@ -102,7 +102,7 @@ for (Animal item : arrayAnimal) {
 IChange[] array = { new MachineCat("叮当"), new StoneMonkey("孙悟空") };
 System.out.println(array[0].changeThing("各种各样的东西"));
 ```
-- **说明了什么**：`ArrayList<Animal>` 在编译期就拒绝 `add(123)`，循环中也无需类型转换；`IChange` 让猫和猴子可以被统一对待，而不污染 `Animal`。
+- **演示内容**：`ArrayList<Animal>` 在编译期就拒绝 `add(123)`，循环中也无需类型转换；`IChange` 让猫和猴子可以被统一对待，而不污染 `Animal`。
 
 ## 参考表
 | | 抽象类 Abstract class | 接口 Interface |
@@ -118,16 +118,16 @@ System.out.println(array[0].changeThing("各种各样的东西"));
 | 大小 | 创建时固定 | 按需增长 | 按需增长 |
 | 类型安全 | 是 | 否（一切都是 `Object`） | 是 |
 | 装箱开销 | 无 | 对值类型装箱 | 无 |
-| 结论 | 适合固定集合 | 有了泛型之后「太老土」 | 默认选择 |
+| 结论 | 适合固定集合 | 有了泛型之后"太老土" | 默认选择 |
 
 ## 实战示例
 作者带着一个程序走过八次重构：
 1. **朴素版**：在 `main` 中直接写 `System.out.println("喵")`。需要第二声喵时就得复制粘贴。
 2. **函数**：提取出 `shout()`。但它仍然在 `Test` 里，归属不对。
 3. **类**：`Cat` 带有 `public String shout()`；客户端写 `Cat cat = new Cat(); cat.shout();`。
-4. **构造方法 + 重载**：用 `Cat(String name)` 让猫一出生就有名字；再加上默认为「无名」的 `Cat()`，这样无名的猫依然可以存在。
+4. **构造方法 + 重载**：用 `Cat(String name)` 让猫一出生就有名字；再加上默认为"无名"的 `Cat()`，这样无名的猫依然可以存在。
 5. **属性**：`shoutNum` 作为私有字段，配上 `setShoutNum`/`getShoutNum`，让 setter 限制取值（`if (value <= 10) ... else 10`）：窗户上的「纱窗」。
-6. **第二个变体一来就撑不住了**：`Dog` 是 `Cat` 的拷贝，只改了一个字符串。提取出 `Animal`（name、shoutNum、属性方法），让两者都 `extends Animal`，并调用 `super(name)`。
+6. **第二个类一来就撑不住了**：`Dog` 是 `Cat` 的拷贝，只改了一个字符串。提取出 `Animal`（name、shoutNum、属性方法），让两者都 `extends Animal`，并调用 `super(name)`。
 7. **为运动会使用多态**：`Animal[] arrayAnimal` 里装满猫和狗；`arrayAnimal[i].shout()` 按运行时类型分派。加入 `Cattle` 和 `Sheep`，循环依然无需改动。
 8. **剩余的重复**：每个 `shout()` 里的循环都是一样的。把 `shout()` 上移到 `Animal`，只把 `getShoutSound()` 留作抽象方法，并把 `Animal` 声明为抽象类，因为「一个动物」无法被实例化。子类缩减为一个构造方法和一行代码。
 
@@ -142,11 +142,11 @@ System.out.println(array[0].changeThing("各种各样的东西"));
 4. 叶子类是具体类，树枝类是抽象类；抽象类承载最多的共享代码和最少的数据。
 5. 抽象类产生于重构；接口在实现者出现之前设计。
 6. 默认使用 `ArrayList<T>`；原始的 `ArrayList` 既丢掉类型安全又付出装箱开销，却一无所获。
-7. 没有设计模式，对多态的理解「多半都是肤浅和片面的」：本章是入场券，而不是终点。
+7. 没有设计模式，对多态的理解"多半都是肤浅和片面的"：本章是入场券，而不是终点。
 
 ## 关联章节
 - **[ch01](ch01-simple-factory.md)**：计算器把这三大特性（封装、继承、多态）用到了一个业务问题上。
-- **[ch10](ch10-template-method.md)**：第 8 步中 `shout()`/`getShoutSound()` 的拆分*就是*模板方法模式（Template Method）；作者明确这样说过。
+- **[ch10](ch10-template-method.md)**：第 8 步中 `shout()`/`getShoutSound()` 的拆分*就是*模板方法模式；作者明确这样说过。
 - **[ch05](ch05-dependency-inversion.md)**：「声明为父类，实例化为子类」成为面向抽象编程这一正式原则。
 - **[ch22](ch22-bridge.md)**：这里 is-a 与 has-a 的警告后来成为合成/聚合复用原则（CARP）。
 - **GoF / UML**：类、接口、泛化和实现的符号在 ch01 §1.11 中被形式化。

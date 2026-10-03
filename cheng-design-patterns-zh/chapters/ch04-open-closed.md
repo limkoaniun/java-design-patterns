@@ -7,7 +7,7 @@
 - **开放-封闭原则（Open-Closed Principle, OCP）** — “软件实体（类、模块、函数等）应该可以扩展，但是不可修改。”[ASD] 两个特征：“对于扩展是开放的 (Open for extension)”和“对于修改是封闭的 (Closed for modification)”[ASD]。
   - 故事类比：一国两制：大陆的制度对修改是封闭的，所以统一的办法是*新增*第二种制度，而不是重写任何一方。另一例：老板无法靠惩罚解决迟到问题，于是重新定义封闭的部分（8 小时 / 工作成果），并对工作时间开放（弹性工作制）。
   - 适用时机：一旦出现某一类变化反复发生的迹象；同时它也是评判任何模式的标准（正是这条标准在 ch29 淘汰了简单工厂模式（Simple Factory））。
-  - 做法：（1）编写第一版时假设不会发生变化；（2）变化出现时，不要打补丁；创建抽象来隔离*这一类*变化；（3）让新需求通过新类来实现；（4）保持已有的类不变。
+  - 做法：(1) 编写第一版时假设不会发生变化；(2) 变化出现时，不要打补丁；创建抽象来隔离*这一类*变化；(3) 让新需求通过新类来实现；(4) 保持已有的类不变。
 - **何时应对变化（When to respond to change）** — “在我们最初编写代码时，假设变化不会发生。当变化发生时，我们就创建抽象来隔离以后发生的同类变化。”[ASD] 还有：“等到变化发生时立即采取行动”[ASD]。在同一个地方跌倒两次，就是你的错。
 - **拒绝不成熟的抽象（Refuse immature abstraction）** — “开发人员应该仅对程序中呈现出频繁变化的那些部分做出抽象，然而，对于应用程序中的每个部分都刻意地进行抽象同样不是一个好主意。拒绝不成熟的抽象和抽象本身一样重要。”[ASD]
 - **选择对什么封闭（Choose what to close against）** — “无论模块是多么的'封闭'，都会存在一些无法对之封闭的变化。……设计人员必须对于他设计的模块应该对哪种变化封闭做出选择。他必须先猜测出最有可能发生的变化种类，然后构造抽象来隔离那些变化。”[ASD]
@@ -57,7 +57,7 @@ public class Pow extends Operation {
 Operation oper = OperationFactory.createOperate(strOperate);
 double result = oper.getResult(numberA, numberB);
 ```
-- **它演示了什么**：`Add`、`Sub` 和客户端都不受 `Pow` 影响。（工厂中的 `switch` 是仍然对修改开放的唯一之处；ch08 和 ch15 将其封闭。）
+- **演示内容**：`Add`、`Sub` 和客户端都不受 `Pow` 影响。（工厂中的 `switch` 是仍然对修改开放的唯一之处；ch08 和 ch15 将其封闭。）
 
 ## 实战示例
 作者把 ch01 的计算器重述为一条开放-封闭原则的时间线：
@@ -82,4 +82,4 @@ double result = oper.getResult(numberA, numberB);
 - **[ch02](ch02-strategy.md)**：策略模式（Strategy）是开放-封闭原则在可互换算法上的应用；其中残留的 `switch` 就是剩下的开放之处。
 - **[ch05](ch05-dependency-inversion.md)**：面向抽象编程是使封闭成为可能的技术。
 - **[ch08](ch08-factory-method.md)** 和 **[ch15](ch15-abstract-factory.md)**：通过子类化和反射封闭工厂的 `switch`。
-- **[ch29](ch29-pattern-summary.md)**：开放封闭是淘汰简单工厂模式（“你在对每一次扩展时都要更改工厂类”）并投票支持工厂方法模式（Factory Method）的评委。
+- **[ch29](ch29-pattern-summary.md)**：开放-封闭原则是淘汰简单工厂模式（“你在对每一次扩展时都要更改工厂类”）并投票支持工厂方法模式（Factory Method）的评委。

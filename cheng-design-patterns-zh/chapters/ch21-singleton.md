@@ -94,9 +94,9 @@ class Singleton {
 | 不能通过多态被继承 | 可以有子类 |
 
 ## 实战示例
-1. **朴素做法**：一个 Swing 主窗口有一个「打开工具箱」按钮，其 `actionPerformed` 执行 `JFrame toolkit = new JFrame("工具箱")` 并显示它。每次点击都会打开另一个工具箱。
+1. **朴素做法**：一个 Swing 主窗口有一个"打开工具箱"按钮，其 `actionPerformed` 执行 `JFrame toolkit = new JFrame("工具箱")` 并显示它。每次点击都会打开另一个工具箱。
 2. **修复 1（调用者一侧的判断）**：把 `JFrame toolkit;` 提升为字段，并把创建代码包进 `if (toolkit == null || !toolkit.isVisible())`。对一个按钮有效。
-3. **哪里出了问题**：再加第二个按钮（「打开工具箱2」），复用同一个 `ToolkitListener`；每个监听器实例都持有自己的 `toolkit` 字段，于是两个按钮打开了两个工具箱。复制粘贴判断没有帮助；*判断*放错了地方。
+3. **哪里出了问题**：再加第二个按钮（"打开工具箱2"），复用同一个 `ToolkitListener`；每个监听器实例都持有自己的 `toolkit` 字段，于是两个按钮打开了两个工具箱。复制粘贴判断没有帮助；*判断*放错了地方。
 4. **重构（单例模式）**：创建 `class Toolkit extends JFrame`，包含 `private static Toolkit toolkit;`、一个 `private Toolkit(String title)` 构造方法，以及 `public static Toolkit getInstance()`，仅当 `toolkit == null || !toolkit.isVisible()` 时才实例化（并配置大小、位置、总在最前、`DISPOSE_ON_CLOSE`、可见），然后返回它。两个监听器现在都只执行 `Toolkit.getInstance();`。改回 `new Toolkit("工具箱")` 会产生编译错误。
 5. **原因**：是否允许存在第二个实例是类自身的职责，就像一对夫妻在计划生育下决定要不要第二个孩子。客户端只管使用。
 6. **加固**：在多线程下，两个同时进行的 `getInstance()` 调用可能都通过 `instance == null`；加上 `synchronized`，再用双重锁定降低开销，或者干脆用静态初始化绕开这个问题。

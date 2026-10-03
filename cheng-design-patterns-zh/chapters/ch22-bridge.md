@@ -5,7 +5,7 @@
 
 ## 引入的框架
 - **桥接模式（Bridge）** — “将抽象部分与它的实现部分分离，使它们都可以独立地变化。”[DP]
-  - 作者特别强调的澄清：「实现」不是指「抽象类的派生类」；“实现指的是抽象类和它的派生类用来实现自己的对象”[DPE]。以手机为例：手机既可以按品牌分类，也可以按功能分类；桥接模式让这两种分类各自独立变化。
+  - 作者特别强调的澄清："实现"不是指「抽象类的派生类」；“实现指的是抽象类和它的派生类用来实现自己的对象”[DPE]。以手机为例：手机既可以按品牌分类，也可以按功能分类；桥接模式让这两种分类各自独立变化。
   - 适用时机：你发现需要从**多个角度**对对象分类，而仅靠继承会为每种组合都产生一个类，并违反开放-封闭原则（OCP）。
   - 做法：(1) 找出两个（或更多）相互独立的维度；(2) 为每个维度提供一个抽象类（`Abstraction`、`Implementor`）；(3) `Abstraction` 持有一个通过 `setImplementor()` 设置的 `Implementor` 引用；(4) `RefinedAbstraction.operation()` 委托给 `implementor.operation()`；(5) 增加品牌或功能时，只需在对应的层次结构中增加一个子类。
   - 结构：`Abstraction`（`-implementor`、`+setImplementor()`、`+operation()`）⟵ `RefinedAbstraction`；`Implementor`（`+operation()`）⟵ `ConcreteImplementorA`、`ConcreteImplementorB`。两个抽象类之间的聚合线就是「桥」。
@@ -30,9 +30,9 @@
 
 ## 反模式
 - **以品牌为根的继承**（`HandsetBrandM` → `HandsetBrandMGame`、`HandsetBrandMAddressList`……）：每增加一个新功能，就要在每个品牌下增加一个子类；每增加一个新品牌，所有功能又要重来一遍。
-- **以功能为根的继承**（`HandsetGame` → `HandsetBrandMGame`、`HandsetBrandNGame`）：从另一侧出现同样的膨胀；「换一种方式」并不能解决问题。
+- **以功能为根的继承**（`HandsetGame` → `HandsetBrandMGame`、`HandsetBrandNGame`）：从另一侧出现同样的膨胀；"换一种方式"并不能解决问题。
 - **为复用而非 is-a 而继承**：把子类锁死在父类的实现上，并阻碍运行时替换。
-- **任由层次结构变成「不可控制的庞然大物」**：说明你把两个维度混进了同一棵树。
+- **任由层次结构变成"不可控制的庞然大物"**：说明你把两个维度混进了同一棵树。
 
 ## 代码示例
 ```java
@@ -116,10 +116,10 @@ ab.setImplementor(new ConcreteImplementorB()); ab.operation();
 1. **版本 1**：一个带 `run()` 的类 `HandsetBrandNGame`；客户端调用它。只有一个品牌时没问题。
 2. **版本 2**：出现了第二个品牌 M；小菜抽象出 `HandsetGame`，其下有 `HandsetBrandMGame` / `HandsetBrandNGame` 子类。仍然没问题。
 3. **版本 3**：两个品牌都需要通讯录。此时根变成 `HandsetBrand` → `HandsetBrandM` / `HandsetBrandN`，每个品牌下各有 `…Game` 和 `…AddressList` 叶子类。客户端使用 `HandsetBrand ab = new HandsetBrandMAddressList(); ab.run();`。
-4. **问题所在**：增加音乐播放 → 要在*每个*品牌下增加一个子类；增加品牌 S → 增加一个品牌类，外加*所有*功能再来一遍；再增加输入法、拍照、品牌 L 和 X → 「我要疯了」。把树翻转成以功能为根也无济于事。
+4. **问题所在**：增加音乐播放 → 要在*每个*品牌下增加一个子类；增加品牌 S → 增加一个品牌类，外加*所有*功能再来一遍；再增加输入法、拍照、品牌 L 和 X → "我要疯了"。把树翻转成以功能为根也无济于事。
 5. **诊断**：大鸟指出了症结：继承是强的、编译期的耦合；“有了新锤子，所有的东西看上去都成了钉子”。应用合成／聚合复用原则。
 6. **重构**：两个抽象类，`HandsetBrand` 和 `HandsetSoft`；品牌*聚合*软件（软件不是品牌的一部分，所以用聚合而不是合成）；`HandsetBrand.setHandsetSoft()` 负责安装软件；`run()` 进行委托。增加 `HandsetMusicPlay` 或 `HandsetBrandS` 各只需一个类，不触及其他任何东西——满足开放-封闭原则。
-7. **命名**：两个抽象类之间的聚合线「像一座桥」→ 桥接模式。
+7. **命名**：两个抽象类之间的聚合线"像一座桥"→ 桥接模式。
 
 ## 关键要点
 1. 当对象必须从多个相互独立的角度分类时，为每个角度提供各自的层次结构，并用聚合把它们桥接起来。
@@ -134,4 +134,4 @@ ab.setImplementor(new ConcreteImplementorB()); ab.operation();
 - **[ch06](ch06-decorator.md)**：装饰模式（Decorator）同样主张用合成代替子类化，但目的是动态地*增加*职责，而不是分离多个维度。
 - **[ch15](ch15-abstract-factory.md)**：抽象工厂模式（Abstract Factory）可以创建桥接模式所结合的相匹配的品牌/软件配对。
 - **[ch17](ch17-adapter.md)**：二者都是结构型模式；适配器模式（Adapter）用于修复已有的接口不匹配，而桥接模式是在一开始就设计进去的。
-- **[ch29](ch29-pattern-summary.md)**：比赛中称赞桥接模式的「用聚合来代替继承」是它的招牌手法。
+- **[ch29](ch29-pattern-summary.md)**：比赛中称赞桥接模式的"用聚合来代替继承"是它的招牌手法。

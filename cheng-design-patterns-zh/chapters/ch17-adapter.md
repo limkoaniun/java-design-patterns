@@ -89,7 +89,7 @@ Player center   = new Translator("姚明");   center.attack(); center.defense();
 1. **朴素模型**：`Player` 抽象类带有 `attack()`/`defense()`；子类 `Forwards`、`Center`、`Guards`；`new Center("姚明")`。这是错的 — 它假装姚明已经听得懂 `attack`。
 2. **现实情况**：`ForeignCenter` 是一个独立的类，方法为 `进攻()`/`防守()`，`name` 是属性风格（刻意与其他球员的构造器风格不同，以强调它写自别处）。
 3. **三种选择**：教姚明英语（修改被适配者 — 短期内不现实）、教所有人中文（修改每个客户端 — 荒谬）、雇一个翻译（适配器）。
-4. **适配器**：`Translator extends Player`，合成一个 `ForeignCenter`，把 `attack()` 转发到 `进攻()`，把 `defense()` 转发到 `防守()`。客户端那一行变成 `Player center = new Translator("姚明")`，客户端其余部分不动。
+4. **适配器模式**：`Translator extends Player`，合成一个 `ForeignCenter`，把 `attack()` 转发到 `进攻()`，把 `defense()` 转发到 `防守()`。客户端那一行变成 `Player center = new Translator("姚明")`，客户端其余部分不动。
 5. **现实世界的印证**：.NET 的 `DataAdapter` 通过 `Fill`/`Update` 把 SQL Server / Oracle / Access / DB2 数据源适配成一个 `DataSet`；Java 中 Hibernate 也做了类似的事。
 6. **刹车**：大鸟讲了扁鹊的故事 — 有名的哥哥治疗重病，无名的大哥预防疾病。适配器模式是外科医生；良好的接口设计是大哥。
 

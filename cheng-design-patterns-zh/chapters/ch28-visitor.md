@@ -8,7 +8,7 @@
   - 结构：`Visitor`（为每个具体元素声明一个 `visitConcreteElementX`）→ `ConcreteVisitor1/2`（各自实现全部访问操作，即算法在每个元素类上的一个片段）；`Element`（声明 `accept(Visitor)`）→ `ConcreteElementA/B`（通过调用 `visitor.visitConcreteElementX(this)` 实现 `accept`）；`ObjectStructure` 枚举其元素，并提供一个高层接口供访问者遍历这些元素。
   - 适用场景：“访问者模式适用于数据结构相对稳定的系统”；数据结构稳定，而作用于它的算法经常变化。作者的前提是：人类恰好只有两种性别，因此 `Visitor` 的方法列表（`getManConclusion`、`getWomanConclusion`）不会改变。
   - 做法：(1) 确认元素类型是固定的；(2) 让 `Visitor` 为每种元素类型提供一个抽象方法；(3) 每个元素的 `accept` 以 `this` 回调访问者；(4) 把同一个操作的相关行为放进同一个 `ConcreteVisitor`；(5) 增加一个 `ObjectStructure`，对所有元素运行访问者。
-  - 为何有效 / 失败模式：其目的是“把处理从数据结构分离出来”；新增操作就是新增一个访问者。但新增元素类型会迫使 `Visitor` 及其所有子类都增加一个新方法，这违反了开放-封闭原则（OCP）。大鸟引用的 GoF 原话：大多数时候你并不需要访问者模式，但当你需要时，你是真的需要。
+  - 为何有效 / 失效模式：其目的是“把处理从数据结构分离出来”；新增操作就是新增一个访问者。但新增元素类型会迫使 `Visitor` 及其所有子类都增加一个新方法，这违反了开放-封闭原则（OCP）。大鸟引用的 GoF 原话：大多数时候你并不需要访问者模式，但当你需要时，你是真的需要。
 
 ## 关键概念
 - **双分派（double dispatch）**：被执行的操作同时取决于请求的种类和两个接收者的类型。客户端把一个具体的 `Action` 传给 `Man.accept`（第一次分派）；`Man` 调用 `visitor.getManConclusion(this)`（第二次分派）。

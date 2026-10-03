@@ -32,7 +32,7 @@
 - **在数据库之间全局查找替换**：SQL 方言各不相同（`GetDate()` 与 `Now()`、`Substring` 与 `Mid`、像 `password` 这样需要加 `[ ]` 的保留字），于是两份代码渐行渐远，今后每个功能都要做两遍。
 - **业务代码中的 `SqlserverUser su = new SqlserverUser()`**：客户端被焊死在一个产品系列上，无法使用多态。
 - **每个客户端类里都写 `IFactory factory = new SqlServerFactory()`**：有 100 个调用方，切换一次就要改 100 处——光靠这个模式解决不了这一点。
-- **带有 `switch(db)` 的简单工厂模式（Simple Factory） `DataAccess`**（95 分版本）：新增 Oracle 意味着要修改每一个 `case` 块，违反开放-封闭。
+- **带有 `switch(db)` 的简单工厂模式（Simple Factory）`DataAccess`**（95 分版本）：新增 Oracle 意味着要修改每一个 `case` 块，违反开放-封闭原则。
 - **用加班解决变化**："菜鸟程序员碰到问题，只会用时间来摆平"——作者警告说，手工修补两套代码库本身就是问题，而不是解决办法。
 
 ## 代码示例
@@ -100,14 +100,14 @@ public class DataAccess {
 | 15.4 | 抽象工厂：工厂创建 User + Department | 每个客户端都要修改 `new XxxFactory()` | 3 个新类 + 修改 `IFactory` 和每个工厂 | 系列切换可行，但仍有 N 处调用点 |
 | 15.7 | 带 `switch(db)` 的简单工厂 `DataAccess` | 修改一个 `db` 字符串 | 新增一个 `createProject()` | "95分"：新增 Oracle 要修改每个 `switch` |
 | 15.8 | 反射 + 抽象工厂 | 修改一个 `db` 字符串，重新编译 | 新增类 + 一个 `createProject()` | 没有 switch；仍需重新编译 |
-| 15.9 | 反射 + `db.properties` | 编辑一个文本文件 | 同上 | "满分"：开放-封闭得到充分遵守 |
+| 15.9 | 反射 + `db.properties` | 编辑一个文本文件 | 同上 | "满分"：开放-封闭原则得到充分遵守 |
 
 ## 实战示例
 小菜把一个电商网站部署在 SQL Server 上；下一个客户只买得起 Access。他尝试全局替换 ADO.NET 的类，结果淹没在 SQL 方言错误和保留字 bug 里，之后还要永远面对双份维护。
 
 1. **朴素做法**：`SqlserverUser su = new SqlserverUser(); su.insert(user);`——类型名和其中的 SQL 都把客户端绑定在一个数据库上。
-2. **工厂方法**：引入 `IUser` + `IFactory`；`SqlServerFactory`/`AccessFactory` 各创建一个产品。现在切换只需 `new AccessFactory()`。对单张表来说够用了。
-3. **抽象工厂**：出现了 `Department` 表。`IFactory` 增加 `createDepartment()`；每个具体工厂现在构建整个产品系列。客户端使用两个接口和一个工厂。大鸟：你一路重构，走进了一个有名字的 GoF 模式。
+2. **工厂方法模式**：引入 `IUser` + `IFactory`；`SqlServerFactory`/`AccessFactory` 各创建一个产品。现在切换只需 `new AccessFactory()`。对单张表来说够用了。
+3. **抽象工厂模式**：出现了 `Department` 表。`IFactory` 增加 `createDepartment()`；每个具体工厂现在构建整个产品系列。客户端使用两个接口和一个工厂。大鸟：你一路重构，走进了一个有名字的 GoF 模式。
 4. **暴露的局限**：新增 `Project` 要修改 `IFactory` 和两个工厂；而且 100 个客户端类各自都持有 `new SqlServerFactory()`。
 5. **简单工厂式重写**：去掉三个工厂类，改用带 `switch(db)` 的静态 `DataAccess.createUser()`。客户端不再指名任何数据库。95/100——新增 Oracle 仍然意味着要修改每个 `switch`。
 6. **反射**：`Class.forName(assemblyName + db + "User")`——小菜一看到类名是*字符串*，switch 就消失了。更改 `db` 仍然需要重新构建。
@@ -119,7 +119,7 @@ public class DataAccess {
 1. 当存在**系列 × 产品类型**时用抽象工厂模式；只有单一产品类型时，工厂方法模式就够了。
 2. 这个模式的收益是具体工厂只被命名**一次**；代价是每新增一种产品类型，都要修改工厂接口和所有工厂。
 3. 任何选择要 `new` 哪个类的 `switch`/`if`，都可以替换成 `Class.forName(prefix + variable + suffix)`。
-4. 把变量推到 properties 文件里，换数据库就只是改配置而不是重新构建——这就是作者对开放-封闭的标准。
+4. 把变量推到 properties 文件里，换数据库就只是改配置而不是重新构建——这就是作者对开放-封闭原则的标准。
 5. 反射并不能免去为 Oracle *新增*类的需要；那属于扩展，是该原则所允许的。它消除的是*修改*。
 6. 把 `getInstance` 放在一处并强制转换为接口；客户端绝不能看到具体类名或数据库名。
 

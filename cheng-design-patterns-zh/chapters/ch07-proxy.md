@@ -6,14 +6,14 @@
 ## 引入的框架
 - **代理模式（Proxy）**——“为其他对象提供一种代理以控制对这个对象的访问。”[DP]
   - 结构：`«interface» ISubject { request() }`；`RealSubject implements ISubject`（代理所代表的真实实体）；`Proxy implements ISubject`（持有对 `RealSubject` 的引用，暴露相同的方法并委托给它）；`Client` 只与 `Proxy` 交互。
-  - 适用场景：客户端必须间接访问某个对象；希望在不改动真实对象或客户端的前提下，在访问周围增加「内务处理」（记账、延迟加载、访问控制、远程调用）。
+  - 适用场景：客户端必须间接访问某个对象；希望在不改动真实对象或客户端的前提下，在访问周围增加"内务处理"（记账、延迟加载、访问控制、远程调用）。
   - 做法：(1) 提取共享接口（`IGiveGift`）；(2) 让真实主题实现它；(3) 编写实现同一接口的代理，持有或创建真实主题，并转发每个方法；(4) 客户端只实例化代理。
   - 作者列举的四种应用 [DP]：
     1. **远程代理（remote proxy）**：为位于另一个地址空间的对象提供本地代表，并隐藏这一事实——例如在 Java 项目中添加 Web Service 时生成的 WSDL 客户端存根。
     2. **虚拟代理（virtual proxy）**：在创建开销大的对象真正被需要之前充当它的替身——例如浏览器在图片下载期间显示保存了图片路径和尺寸的占位框。
     3. **安全代理（protection proxy）**：当客户端拥有不同权限时，控制对真实对象的访问权限。
     4. **智能指引（smart reference）**：每次访问时做额外工作——引用计数以便释放对象、首次使用时把持久对象加载到内存、访问前检查锁。
-  - 为什么有效 / 失败模式：代理引入了「一定程度的间接性」，额外的行为正是放在这层间接性里。失败模式：如果代理没有实现与真实主题相同的接口，客户端就无法互换使用它们，这个「代理」不过是另一个知道得太多的类（小菜的第二次尝试）。
+  - 为什么有效 / 失效模式：代理引入了"一定程度的间接性"，额外的行为正是放在这层间接性里。失效模式：如果代理没有实现与真实主题相同的接口，客户端就无法互换使用它们，这个「代理」不过是另一个知道得太多的类（小菜的第二次尝试）。
 
 ## 关键概念
 - **ISubject / Subject 接口**：共享接口，使 `Proxy` 能用在任何期望 `RealSubject` 的地方。
@@ -55,9 +55,9 @@ class Proxy implements ISubject {
 Proxy proxy = new Proxy();
 proxy.request();
 ```
-- **演示了什么**：代理与真实主题共享 `ISubject`，因此客户端可以使用任意一个；代理持有引用并委托。
+- **演示内容**：代理与真实主题共享 `ISubject`，因此客户端可以使用任意一个；代理持有引用并委托。
 
-故事形式（「符合实际」的版本）：
+故事形式（"符合实际"的版本）：
 
 ```java
 interface IGiveGift { void giveDolls(); void giveFlowers(); void giveChocolate(); }
@@ -82,7 +82,7 @@ SchoolGirl girlLjj = new SchoolGirl(); girlLjj.setName("李娇娇");
 Proxy boyDl = new Proxy(girlLjj);       // client only ever sees the proxy
 boyDl.giveDolls(); boyDl.giveFlowers(); boyDl.giveChocolate();
 ```
-- **演示了什么**：`Pursuit` 只是多了 `implements IGiveGift`；代理的构造函数创建真实主题，每个代理方法都调用同名的真实方法；客户端代码与「只有代理」的尝试相比没有变化，但语义现在正确了。
+- **演示内容**：`Pursuit` 只是多了 `implements IGiveGift`；代理的构造函数创建真实主题，每个代理方法都调用同名的真实方法；客户端代码与「只有代理」的尝试相比没有变化，但语义现在正确了。
 
 ## 实战示例
 1. **版本 1——没有代理**：`Pursuit` 持有 `SchoolGirl` 并直接送礼物。问题：故事要求两人彼此不认识；直接耦合违背了这一要求。
@@ -93,7 +93,7 @@ boyDl.giveDolls(); boyDl.giveFlowers(); boyDl.giveChocolate();
 ## 关键要点
 1. 代理必须实现与真实主题相同的接口；这正是它可以被替换的原因。
 2. 代理持有对真实主题的引用并转发同名调用；额外的行为（远程调用、延迟加载、安全、记账）都放在这层转发里。
-3. 按意图选择代理的变体：远程、虚拟、安全代理或智能指引。
+3. 按意图选择代理的变体：远程代理、虚拟代理、安全代理或智能指引。
 4. 不要让代理吞掉真正的工作；如果真实主题消失了，你只是给一个类改了名，并没有应用模式。
 5. 代理是常见的基础设施（Web Service 存根、浏览器图片加载），不是什么奇特的模式。
 
@@ -101,4 +101,4 @@ boyDl.giveDolls(); boyDl.giveFlowers(); boyDl.giveChocolate();
 - **[ch06](ch06-decorator.md)**：装饰模式（Decorator）和代理模式都在同一接口后包装一个对象；装饰模式添加职责，代理模式控制访问。
 - **[ch17](ch17-adapter.md)**：适配器模式（Adapter）同样包装，但会改变接口而不是保持接口。
 - **[ch29](ch29-pattern-summary.md)**：比赛一章调侃代理小姐可能派了个替身来参赛：一句话说明这个模式。
-- **[ch05](ch05-dependency-inversion.md)**：客户端依赖 `ISubject`，这是「针对接口编程」的一次应用。
+- **[ch05](ch05-dependency-inversion.md)**：客户端依赖 `ISubject`，这是"针对接口编程"的一次应用。

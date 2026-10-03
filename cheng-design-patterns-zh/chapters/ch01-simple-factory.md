@@ -80,7 +80,7 @@ public class OperationFactory {
 Operation oper = OperationFactory.createOperate(strOperate);
 double result = oper.getResult(numberA, numberB);
 ```
-- **它演示了什么**：客户端从不指名具体类；修改 `Add` 只涉及一个文件；新增 `Pow` 意味着一个新子类加上工厂的一个分支，界面完全不动。
+- **演示内容**：客户端从不指名具体类；修改 `Add` 只涉及一个文件；新增 `Pow` 意味着一个新子类加上工厂的一个分支，界面完全不动。
 
 ## 参考表
 | UML 关系 | 表示法 | 含义 | 书中示例 |
@@ -118,6 +118,6 @@ double result = oper.getResult(numberA, numberB);
 ## 关联章节
 - **[ch00](ch00-oo-basics.md)**：前置章节；作者说如果 v4 读起来吃力，就回到序章。
 - **[ch02](ch02-strategy.md)**：同样的形状（抽象父类、子类）在策略模式（Strategy）中再次出现，而工厂被并入 Context（上下文）。
-- **[ch04](ch04-open-closed.md)**：v1→v5 的演进被重述为开放-封闭原则（Open-Closed Principle）的教科书式例证。
+- **[ch04](ch04-open-closed.md)**：v1→v5 的演进被重述为开放-封闭原则（OCP）的教科书式例证。
 - **[ch08](ch08-factory-method.md)**：用每个产品一个工厂子类来取代工厂的 `switch`。
 - **[ch15](ch15-abstract-factory.md)**：反射彻底去掉了 `switch`。

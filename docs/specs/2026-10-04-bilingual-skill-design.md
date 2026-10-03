@@ -21,7 +21,7 @@ Publish the `java-design-patterns` agent skill (generated from 大话设计模�
 ```
 java-design-patterns/                  ~/Dev/projects/java-design-patterns
 ├── README.md                           中文, opens with "English · 中文" toggle line
-├── README.en.md                        English, same toggle line
+├── README.zh.md                        English, same toggle line
 ├── LICENSE                             covers the repo's own prose and scripts
 ├── docs/specs/…                        this spec and the implementation plan
 ├── tools/check_parity.py               stdlib-only parity checker

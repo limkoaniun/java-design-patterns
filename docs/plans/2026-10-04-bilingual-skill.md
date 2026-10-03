@@ -978,7 +978,7 @@ git commit -m "fix(zh): quality-read corrections"
 
 **Files:**
 - Create: `README.md` (中文)
-- Create: `README.en.md` (English)
+- Create: `README.zh.md` (English)
 
 **Interfaces:**
 - Consumes: skill folder names from Task 1 and Task 5.
@@ -987,7 +987,7 @@ git commit -m "fix(zh): quality-read corrections"
 - [ ] **Step 1: Write README.md (中文)**
 
 ```markdown
-[English](README.en.md) · 中文
+[English](README.zh.md) · 中文
 
 # java-design-patterns
 
@@ -1028,7 +1028,7 @@ Claude Code 用户也可以把对应文件夹软链接到 `~/.claude/skills/`。
 本仓库的所有文件都是归纳整理与重构，不是原书文本。书中的模式定义以短引文形式出现并注明出处（程杰）。代码清单由 PDF 内嵌图片经 OCR 恢复并手工整理，结构与命名忠实于原书，细节可能略有出入。请购买原书以获取完整内容。
 ```
 
-- [ ] **Step 2: Write README.en.md**
+- [ ] **Step 2: Write README.zh.md**
 
 ```markdown
 English · [中文](README.md)
@@ -1075,15 +1075,15 @@ All files are synthesized summaries and reconstructions, not the book's text. Pa
 - [ ] **Step 3: Check the toggle lines and links**
 
 ```bash
-head -1 README.md README.en.md
-grep -o '(README[^)]*)' README.md README.en.md
+head -1 README.md README.zh.md
+grep -o '(README[^)]*)' README.md README.zh.md
 ```
-Expected: `[English](README.en.md) · 中文` and `English · [中文](README.md)`; link targets `README.en.md` and `README.md` both exist.
+Expected: `[English](README.zh.md) · 中文` and `English · [中文](README.md)`; link targets `README.zh.md` and `README.md` both exist.
 
 - [ ] **Step 4: Commit**
 
 ```bash
-git add README.md README.en.md
+git add README.md README.zh.md
 git commit -m "docs: bilingual READMEs with language toggle"
 ```
 
@@ -1158,4 +1158,4 @@ Expected: the session invokes `java-design-patterns-zh`, reads `java-design-patt
 
 - [ ] **Step 6: Verify the GitHub rendering**
 
-Open `https://github.com/limkoaniun/java-design-patterns` and `…/blob/main/README.en.md`. Expected: the toggle line is the first line on both pages and each link switches language.
+Open `https://github.com/limkoaniun/java-design-patterns` and `…/blob/main/README.zh.md`. Expected: the toggle line is the first line on both pages and each link switches language.

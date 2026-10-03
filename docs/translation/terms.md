@@ -42,7 +42,7 @@ Derived from glossary.md. Use the zh form everywhere. First mention per file: �
 | Proxy | 代理 |
 | Refactoring | 重构 |
 | Shallow copy | 浅复制 |
-| Simple Factory | 简单工厂 |
+| Simple Factory | 简单工厂模式 (prose); 简单工厂 only in headings and bare-name table cells |
 | Single Responsibility | 单一职责原则 (SRP) |
 | Singleton | 单例 |
 | State | 状态 |
@@ -59,7 +59,7 @@ Where a row below conflicts with the extracted table above, this block wins. Par
 | English | 中文 |
 |---|---|
 | Strategy (pattern name in prose) | 策略模式 |
-| Simple Factory | 简单工厂 |
+| Simple Factory | 简单工厂模式 (prose); 简单工厂 only in headings and bare-name table cells |
 | Factory Method | 工厂方法 |
 | Abstract Factory | 抽象工厂 |
 | Template Method | 模板方法 |
@@ -88,6 +88,8 @@ Where a row below conflicts with the extracted table above, this block wins. Par
 
 Pattern names in prose: 中文（English）on first mention in the file, 中文 alone afterwards. Example: 策略模式（Strategy）… 策略模式 …
 
-Every one of the 23 pattern names takes the 模式 suffix in prose, matching the book's own usage: 观察者模式, 装饰模式, 工厂方法模式, 抽象工厂模式, 简单工厂模式, 单例模式, 原型模式, 建造者模式, 适配器模式, 桥接模式, 组合模式, 外观模式, 享元模式, 代理模式, 职责链模式, 命令模式, 解释器模式, 迭代器模式, 中介者模式, 备忘录模式, 状态模式, 策略模式, 模板方法模式, 访问者模式. Drop the suffix only inside the fixed `###` card headings of patterns.md (rule 2 of the brief) and inside tables whose en cell is the bare name. Principle names never take a suffix beyond 原则 (单一职责原则, 开放-封闭原则, 依赖倒转原则, 里氏代换原则, 迪米特法则, 合成/聚合复用原则).
+Every one of the 24 pattern names (GoF 23 plus 简单工厂) takes the 模式 suffix in prose, matching the book's own usage: 观察者模式, 装饰模式, 工厂方法模式, 抽象工厂模式, 简单工厂模式, 单例模式, 原型模式, 建造者模式, 适配器模式, 桥接模式, 组合模式, 外观模式, 享元模式, 代理模式, 职责链模式, 命令模式, 解释器模式, 迭代器模式, 中介者模式, 备忘录模式, 状态模式, 策略模式, 模板方法模式, 访问者模式. Drop the suffix only inside the fixed `###` card headings of patterns.md (rule 2 of the brief) and inside tables whose en cell is the bare name. Principle names never take a suffix beyond 原则 (单一职责原则, 开放-封闭原则, 依赖倒转原则, 里氏代换原则, 迪米特法则, 合成/聚合复用原则).
 Role names from UML (Context, Strategy, ConcreteStrategy, Creator, Product, Invoker, Receiver, Originator, Caretaker, Colleague) stay in English, in backticks when they name a class.
 Tags `[DP]` `[DPE]` `[ASD]` `[J&DP]` stay exactly as written.
+
+Additional fixed renderings: smart reference proxy → 智能指引代理; protection proxy → 安全代理 (the book's own names); 'unit test' → 单元测试; Builder in prose → 建造者模式（Builder）on first mention.

@@ -5,7 +5,7 @@ Status: approved design, pending implementation plan
 
 ## Goal
 
-Publish the `cheng-design-patterns` agent skill (generated from 大话设计模式（Java溢彩加强版）by 程杰 with book-to-skill) as a public GitHub repository containing two complete, parallel skills: one in Chinese, one in English. A user installs one skill and gets the whole knowledge base in that language.
+Publish the `cheng-design-patterns` agent skill (generated from 大话设计模式by 程杰 with book-to-skill) as a public GitHub repository containing two complete, parallel skills: one in Chinese, one in English. A user installs one skill and gets the whole knowledge base in that language.
 
 ## Decisions already made
 

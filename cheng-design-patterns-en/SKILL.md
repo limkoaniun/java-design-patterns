@@ -1,11 +1,11 @@
 ---
 name: cheng-design-patterns-en
-description: "Knowledge base from \"大话设计模式（Java溢彩加强版）\" by 程杰 (Cheng Jie). Use when applying the 23 GoF design patterns (策略/工厂/装饰/观察者/状态 etc.) or the six OO design principles (单一职责, 开放-封闭, 依赖倒转, 里氏代换, 迪米特, 合成/聚合复用) while designing or refactoring Java/OO code, choosing between similar patterns, studying the book, or referencing its chapters."
+description: "Knowledge base from \"大话设计模式\" by 程杰 (Cheng Jie). Use when applying the 23 GoF design patterns (策略/工厂/装饰/观察者/状态 etc.) or the six OO design principles (单一职责, 开放-封闭, 依赖倒转, 里氏代换, 迪米特, 合成/聚合复用) while designing or refactoring Java/OO code, choosing between similar patterns, studying the book, or referencing its chapters."
 ---
 
 <!-- argument-hint: [pattern name (中/英), principle, chapter number, or design question] -->
 
-# 大话设计模式（Java溢彩加强版）
+# 大话设计模式
 **Author**: 程杰 (Cheng Jie) | **Pages**: ~500 | **Chapters**: 30 (楔子 ch00 + ch01–ch29) | **Generated**: 2026-09-30
 
 ## How to Use This Skill

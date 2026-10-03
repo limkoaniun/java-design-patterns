@@ -90,7 +90,7 @@ __pycache__/
 `LICENSE`: MIT, copyright 2026 Guanyu Lin, followed by this paragraph after the MIT text:
 
 ```
-The book 大话设计模式（Java溢彩加强版） is © 程杰 and its publisher. This
+The book 大话设计模式 is © 程杰 and its publisher. This
 repository contains synthesized summaries, reconstructed code listings, and
 short attributed quotations for study purposes. It does not contain the
 book's text. The MIT license above covers only this repository's own prose,
@@ -991,7 +991,7 @@ git commit -m "fix(zh): quality-read corrections"
 
 # cheng-design-patterns
 
-从程杰《大话设计模式（Java溢彩加强版）》生成的 Agent Skill，使用 [book-to-skill](https://github.com/virgiliojr94/book-to-skill) 构建。中英文两个版本并行维护，结构逐文件对应。
+从程杰《大话设计模式》生成的 Agent Skill，使用 [book-to-skill](https://github.com/virgiliojr94/book-to-skill) 构建。中英文两个版本并行维护，结构逐文件对应。
 
 它把书中的 23 个 GoF 设计模式和六大面向对象设计原则整理成可查询的知识库：作者的原文定义、模式选择规则、商场收银重构阶梯、相似模式辨析，以及每章紧凑的 Java 代码重构。
 
@@ -1035,7 +1035,7 @@ English · [中文](README.md)
 
 # cheng-design-patterns
 
-Agent skill generated from *大话设计模式（Java溢彩加强版）* by 程杰 (Cheng Jie) with [book-to-skill](https://github.com/virgiliojr94/book-to-skill). Maintained in two parallel versions, Chinese and English, with a file-for-file matching structure.
+Agent skill generated from *大话设计模式* by 程杰 (Cheng Jie) with [book-to-skill](https://github.com/virgiliojr94/book-to-skill). Maintained in two parallel versions, Chinese and English, with a file-for-file matching structure.
 
 It packages the book's 23 GoF design patterns and six OO design principles as a queryable knowledge base: the author's definitions, pattern-selection rules, the 商场收银 refactoring ladder, similar-pattern disambiguation, and compact reconstructed Java listings for each chapter.
 

@@ -2,7 +2,7 @@ English · [中文](README.md)
 
 # cheng-design-patterns
 
-Agent skill generated from *大话设计模式（Java溢彩加强版）* by 程杰 (Cheng Jie) with [book-to-skill](https://github.com/virgiliojr94/book-to-skill). Maintained in two parallel versions, Chinese and English, with a file-for-file matching structure.
+Agent skill generated from *大话设计模式* by 程杰 (Cheng Jie) with [book-to-skill](https://github.com/virgiliojr94/book-to-skill). Maintained in two parallel versions, Chinese and English, with a file-for-file matching structure.
 
 It packages the book's 23 GoF design patterns and six OO design principles as a queryable knowledge base: the author's definitions, pattern-selection rules, the 商场收银 refactoring ladder, similar-pattern disambiguation, and compact reconstructed Java listings for each chapter.
 
@@ -36,4 +36,4 @@ Both versions share one directory layout. `tools/check_parity.py` verifies that 
 
 ## Note on content
 
-All files are synthesized summaries and reconstructions, not the book's text. Pattern definitions appear as short quotations from the book, carrying the book's own citation tags ([DP], [DPE], [ASD], [J&DP]). Code listings were recovered by OCR from the PDF's embedded images and cleaned by hand; they are faithful in structure and naming but may differ from the printed listings in minor details. For the full material, buy the book: [大话设计模式（Java溢彩加强版）](https://book.douban.com/subject/36116620/) by 程杰, Tsinghua University Press, ISBN 978-7-302-61553-8.
+All files are synthesized summaries and reconstructions, not the book's text. Pattern definitions appear as short quotations from the book, carrying the book's own citation tags ([DP], [DPE], [ASD], [J&DP]). Code listings were recovered by OCR from the PDF's embedded images and cleaned by hand; they are faithful in structure and naming but may differ from the printed listings in minor details. For the full material, buy the book: [大话设计模式](https://book.douban.com/subject/36116620/) by 程杰, Tsinghua University Press, ISBN 978-7-302-61553-8.
